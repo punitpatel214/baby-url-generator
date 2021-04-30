@@ -4,7 +4,7 @@ plugins {
 }
 
 version = "0.1"
-group = "id.generator"
+group = "example.systemdesign.babyurl.id.generator"
 
 repositories {
     mavenCentral()
@@ -15,7 +15,7 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("id.generator.*")
+        annotations("example.systemdesign.babyurl.id.generator.*")
     }
 }
 
@@ -23,12 +23,24 @@ dependencies {
     implementation("io.micronaut:micronaut-validation")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation ("org.postgresql:postgresql")
+    implementation 'org.projectlombok:lombok:1.18.18'
+
     runtimeOnly("ch.qos.logback:logback-classic")
+
+    testCompile "org.junit.jupiter:junit-jupiter-params:5.7.0"
+    testCompile "org.testcontainers:testcontainers:1.15.2"
+    testCompile "org.testcontainers:junit-jupiter:1.15.2"
+    testCompile "org.testcontainers:postgresql:1.15.2"
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.21.0'
+    testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.23.0'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.15.0'
 }
 
 
 application {
-    mainClass.set("id.generator.Application")
+    mainClass.set("example.systemdesign.babyurl.id.generator.Application")
 }
 
 java {

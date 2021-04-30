@@ -1,4 +1,4 @@
-package id.generator;
+package example.systemdesign.babyurl.idgenerator;
 
 import io.micronaut.runtime.Micronaut;
 
@@ -8,3 +8,4 @@ public class Application {
         Micronaut.run(Application.class, args);
     }
 }
+
