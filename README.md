@@ -11,5 +11,16 @@ Baby URL Generator is used to create shorter url for long URLs. We call these sh
   - User can see all created baby link and can delete baby link. User can change long url
   - Guest User also can generate baby link   
 
-
+**Choose Database**
+  - No Relational Data
+  - Read Heavy Application
+  - Data is relatively small 
+  - in future billions of Records
+  
+   Relational Database : CA
+   Mongo, Hbase, Redis: CP (master/slave)
+   Casandra, Riak, CouchDB AP
+   
+   https://www.slideshare.net/EdurekaIN/no-sql-databases-35591065
+   https://www.youtube.com/watch?v=QlqylUeqeis
 
