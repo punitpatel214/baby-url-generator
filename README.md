@@ -18,9 +18,14 @@ Baby URL Generator is used to create shorter url for long URLs. We call these sh
   - in future billions of Records
   
    Relational Database : CA
+   
    Mongo, Hbase, Redis: CP (master/slave)
+   
    Casandra, Riak, CouchDB AP
    
    https://www.slideshare.net/EdurekaIN/no-sql-databases-35591065
+   
    https://www.youtube.com/watch?v=QlqylUeqeis
+   
+   https://www.instaclustr.com/cassandra-vs-mongodb/
 
