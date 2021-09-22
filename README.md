@@ -29,3 +29,14 @@ Baby URL Generator is used to create shorter url for long URLs. We call these sh
    
    https://www.instaclustr.com/cassandra-vs-mongodb/
 
+   Use Casandra for Baby URL Generation Service 
+   
+  **For Key Generation Service**
+    - We can Use Casandra with ZooKeeper as we have 2 table 1 for unused keys and other for used keys
+    - second option MongoDB or equilent CP based NoSQL DB
+    - RDBMS can be used
+    
+  **Stategy to genrate keys offline**
+    - Use Base62 with random, in this case need to POC how many records we can generate in DB
+    - generate all possible keys and shuffle them, in this case we need more storage to save db
+    - best solution sthat we can generate 5 millions of records and generate more when some threshold reach
