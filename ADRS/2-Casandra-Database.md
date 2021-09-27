@@ -33,9 +33,9 @@ Base(Basically Available, Soft State, Eventual consistency) from nosql is enough
 
 
 # Refrences
-[NOSQL DB Selection](https://www.slideshare.net/EdurekaIN/no-sql-databases-35591065)
-[Casandra vs MongoDB](https://www.instaclustr.com/cassandra-vs-mongodb/)
-[Casandra vs HBase vs MongoDB](https://www.youtube.com/watch?v=QlqylUeqeis)
+- [NOSQL DB Selection](https://www.slideshare.net/EdurekaIN/no-sql-databases-35591065)
+- [Casandra vs MongoDB](https://www.instaclustr.com/cassandra-vs-mongodb/)
+- [Casandra vs HBase vs MongoDB](https://www.youtube.com/watch?v=QlqylUeqeis)
 
 
 
