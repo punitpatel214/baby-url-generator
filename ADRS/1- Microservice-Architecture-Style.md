@@ -16,5 +16,18 @@ Positive consequences of the wide use of microservices contribute to this decisi
 - support for containerized microservices available in public cloud providers.
 
 Alternatives:
-- **Serverless** : we can create many of backend service as Servless architecture. But 
+- **Serverless** : we can create backend service as Servless architecture. However for the some of the functionality like In memory cache (Key Generation Service) don't fit in Serverless Architecture. It required distrbuted cache in Key Generation Service as well for Serverless architecture. At the initial state we don't want to mix both microservice and serverless architecture in system. Also developer need to learn create, maintain and deploy serverless architecture.
+- **Service-based-architecture**: This style will work for the system.  It has the nice benefit of separating the system in coarse-grained units called domain services, which are simpler to design and reduce the burden of packaging, deploying and overseeing to a reasonably small number of units. We chose microservice over service-based for two main reasons:
+  - Microservices are more suitable to containerization and hence cloud-deployment.
+  - In terms of scalability, evolvebility and elasticity microservice architecture better fit.
+
+## Consequences
+- Team need to understand dev ops fundamental
+- Debugging, Distributed Tracing and monitor need extra efforts. Team need to have knowledge of log consodilation, distributed tracing and monitoring distributed application.
+- Developers should be familiar with microservice development, [microservice patterns](https://microservices.io/),
+ as well as with tools and frameworks, such as:  
+  - Docker
+  - Kubernetes
+  - Cloud 
+
   
