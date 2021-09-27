@@ -8,6 +8,9 @@ The overall architecture of the baby url generation is simple, easy to create, m
 For the small number of urls, we can use the monolithic architecture. But as system evolve we need to support millons of url redirection. So we need to consider any distributed
 architecture solution.
 
+Consider architectures in [architecture styles worksheets](https://www.developertoarchitect.com/downloads/worksheets.html) 
+![](https://github.com/punitpatel214/baby-url-generator/blob/master/ADRS/architectures.png)
+
 # Decision
 We use the microservice architecture for the backend service of the baby url generation. Microservice will be containerized with Docker.
 Positive consequences of the wide use of microservices contribute to this decision:
