@@ -3,8 +3,8 @@ micronaut:
     name: babyUrlGenerator
 cassandra:
   default:
-    clusterName: '"myCluster"'
-    contactPoint: '"localhost"'
+    clusterName: '"Test Cluster"'
+    contactPoint: '"127.0.0.1"'
     port: 9042
     maxSchemaAgreementWaitSeconds: 20
     ssl: true
