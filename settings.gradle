@@ -1,0 +1,3 @@
+
+rootProject.name="baby-url-generator"
+include 'key-generator'

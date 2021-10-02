@@ -1,0 +1,9 @@
+
+version = "0.1"
+group = "com.babyurl"
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+}
