@@ -1,23 +1,21 @@
 package com.babyurl.api;
 
-import com.babyurl.repository.KeyGeneratorRepository;
+import com.babyurl.service.KeyGeneratorService;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 
 @Controller("/generate")
 public class KeyGeneratorAPI {
 
-    private final KeyGeneratorRepository keyGeneratorRepository;
+    private final KeyGeneratorService keyGeneratorService;
 
-    private int sequence = 0;
-
-    public KeyGeneratorAPI(KeyGeneratorRepository keyGeneratorRepository) {
-        this.keyGeneratorRepository = keyGeneratorRepository;
+    public KeyGeneratorAPI(KeyGeneratorService keyGeneratorService) {
+        this.keyGeneratorService = keyGeneratorService;
     }
 
     @Get
-    public void generateKeys() {
-        keyGeneratorRepository.insertKey("abc" + sequence++);
+    public String generateKeys() {
+        return keyGeneratorService.generateKey();
     }
 
 }
