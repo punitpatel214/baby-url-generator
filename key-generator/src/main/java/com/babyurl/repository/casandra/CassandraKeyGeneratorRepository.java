@@ -8,8 +8,9 @@ import com.datastax.oss.driver.api.querybuilder.insert.Insert;
 import com.datastax.oss.driver.api.querybuilder.select.Select;
 import jakarta.inject.Singleton;
 
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.insertInto;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
@@ -19,6 +20,7 @@ public class CassandraKeyGeneratorRepository implements KeyGeneratorRepository {
 
     private static final String KEY_SPACE = "baby_url";
     private static final String KEYS_TABLE = "keys";
+    public static final String USED_KEYS = "usedKeys";
     private final CqlSession cqlSession;
 
     public CassandraKeyGeneratorRepository(CqlSession cqlSession) {
@@ -39,24 +41,31 @@ public class CassandraKeyGeneratorRepository implements KeyGeneratorRepository {
 
     @Override
     public String getKey() {
-        return fetchRandomKey()
-                .filter(this::insertInUsedKey)
-                .filter(this::deleteKey)
+        return getKeys(1).stream()
+                .findFirst()
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    private Optional<String> fetchRandomKey() {
+    @Override
+    public List<String> getKeys(int size) {
+        return fetchRandomKey(size).stream()
+                .filter(this::insertInUsedKey)
+                .filter(this::deleteKey)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> fetchRandomKey(int limit) {
         Select select = QueryBuilder.selectFrom(KEY_SPACE, KEYS_TABLE)
                 .column("key")
-                .limit(1);
+                .limit(limit);
         return cqlSession.execute(select.build()).all()
                 .stream()
-                .findFirst()
-                .map(row -> row.getString("key"));
+                .map(row -> row.getString("key"))
+                .collect(Collectors.toList());
     }
 
     private boolean insertInUsedKey(String key) {
-        Insert insert = insertInto(KEY_SPACE, "usedKeys")
+        Insert insert = insertInto(KEY_SPACE, USED_KEYS)
                 .value("key", literal(key))
                 .ifNotExists();
         return cqlSession.execute(insert.build()).all()

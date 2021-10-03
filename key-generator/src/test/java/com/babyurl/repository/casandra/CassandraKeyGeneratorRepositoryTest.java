@@ -1,12 +1,9 @@
 package com.babyurl.repository.casandra;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.cql.BoundStatement;
-import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
-import com.datastax.oss.driver.api.querybuilder.delete.Delete;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
 import com.datastax.oss.driver.api.querybuilder.select.Select;
@@ -18,7 +15,10 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.net.InetSocketAddress;
 import java.time.Duration;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +29,8 @@ class CassandraKeyGeneratorRepositoryTest {
     private static final CassandraContainer<?> cassandraContainer = new CassandraContainer<>(DockerImageName.parse("cassandra:latest"))
             .withExposedPorts(9042)
             .withStartupTimeout(Duration.ofMinutes(3));
+    public static final String USED_KEYS = "usedKeys";
+    public static final String KEYS = "keys";
 
     @BeforeAll
     static void beforeAll() {
@@ -42,7 +44,8 @@ class CassandraKeyGeneratorRepositoryTest {
     @BeforeEach
     void setUp() {
         dataSetup();
-        deleteKey(CassandraKeyGeneratorRepositoryTest.KEY_VALUE);
+        deleteAll(KEYS);
+        deleteAll(USED_KEYS);
     }
 
     private void dataSetup() {
@@ -52,8 +55,8 @@ class CassandraKeyGeneratorRepositoryTest {
                     .withLocalDatacenter("datacenter1")
                     .build();
             createKeySpace();
-            createTable("keys");
-            createTable("usedKeys");
+            createTable(KEYS);
+            createTable(USED_KEYS);
         }
     }
 
@@ -98,11 +101,11 @@ class CassandraKeyGeneratorRepositoryTest {
         String key = cassandraKeyGeneratorRepository.getKey();
         assertEquals(KEY_VALUE, key);
 
-        String usedKeys = getKeyFromTable("usedKeys");
+        String usedKeys = getKeysFromTable(USED_KEYS).get(0);
         assertEquals(KEY_VALUE, usedKeys);
 
-        String deleteKey = getKeyFromTable("keys");
-        assertEquals(EMPTY_STRING, deleteKey);
+        List<String> keys = getKeysFromTable(KEYS);
+        assertTrue(keys.isEmpty());
     }
 
     @Test
@@ -120,19 +123,32 @@ class CassandraKeyGeneratorRepositoryTest {
         assertThrows(NoSuchElementException.class, cassandraKeyGeneratorRepository::getKey);
     }
 
-    private String getKeyFromTable(String tableName) {
-        Select select = QueryBuilder.selectFrom(tableName)
-                .column("key")
-                .whereColumn("key").isEqualTo(literal(KEY_VALUE));
-        return cqlSession.execute(select.build()).all().stream().findFirst()
-                .map(resultSet -> resultSet.getString("key"))
-                .orElse(EMPTY_STRING);
+    @Test
+    void shouldGetKeys() {
+        CassandraKeyGeneratorRepository cassandraKeyGeneratorRepository = new CassandraKeyGeneratorRepository(cqlSession);
+        IntStream.range(0, 10)
+                .forEach(index -> cassandraKeyGeneratorRepository.insertKey(KEY_VALUE + index));
+
+        List<String> keys = cassandraKeyGeneratorRepository.getKeys(10);
+        assertEquals(10, keys.size());
+
+        List<String> usedKeys = getKeysFromTable(USED_KEYS);
+        assertEquals(10, usedKeys.size());
+
+        keys = getKeysFromTable(KEYS);
+        assertTrue(keys.isEmpty());
     }
 
-    private void deleteKey(String keyValue) {
-        Delete delete = QueryBuilder.deleteFrom("keys")
-                .whereColumn("key").isEqualTo(literal(keyValue));
-        cqlSession.execute(delete.build());
+    private List<String> getKeysFromTable(String tableName) {
+        Select select = QueryBuilder.selectFrom(tableName)
+                .column("key");
+        return cqlSession.execute(select.build()).all().stream()
+                .map(resultSet -> resultSet.getString("key"))
+                .collect(Collectors.toList());
+    }
+
+    private void deleteAll(String tableName) {
+        cqlSession.execute(QueryBuilder.truncate(tableName).build());
     }
 
 
