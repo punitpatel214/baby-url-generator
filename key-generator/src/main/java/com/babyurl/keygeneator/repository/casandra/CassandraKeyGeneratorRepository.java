@@ -1,6 +1,6 @@
-package com.babyurl.repository.casandra;
+package com.babyurl.keygeneator.repository.casandra;
 
-import com.babyurl.repository.KeyGeneratorRepository;
+import com.babyurl.keygeneator.repository.KeyGeneratorRepository;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.delete.Delete;

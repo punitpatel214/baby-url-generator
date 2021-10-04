@@ -1,87 +1,40 @@
-package com.babyurl.repository.casandra;
+package com.babyurl.keygeneator.repository.casandra;
 
-import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
-import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
-import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
-import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
 import com.datastax.oss.driver.api.querybuilder.select.Select;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.CassandraContainer;
-import org.testcontainers.utility.DockerImageName;
 
-import java.net.InetSocketAddress;
-import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 import static org.junit.jupiter.api.Assertions.*;
 
-class CassandraKeyGeneratorRepositoryTest {
-
-    private static final String EMPTY_STRING = "";
-    private static final CassandraContainer<?> cassandraContainer = new CassandraContainer<>(DockerImageName.parse("cassandra:latest"))
-            .withExposedPorts(9042)
-            .withStartupTimeout(Duration.ofMinutes(3));
-    public static final String USED_KEYS = "usedKeys";
-    public static final String KEYS = "keys";
-
-    @BeforeAll
-    static void beforeAll() {
-        cassandraContainer.start();
-    }
-
-    private CqlSession cqlSession;
+class CassandraKeyGeneratorRepositoryTest extends BaseCassandraContainerTest {
 
     private static final String KEY_VALUE = "randomKey";
 
+    @BeforeAll
+    static void beforeAll() {
+        startCassandraContainer();
+    }
+
     @BeforeEach
     void setUp() {
-        dataSetup();
+        super.dataSetup();
         deleteAll(KEYS);
         deleteAll(USED_KEYS);
     }
 
-    private void dataSetup() {
-        if (cqlSession == null) {
-            cqlSession = CqlSession.builder()
-                    .addContactPoint(new InetSocketAddress(cassandraContainer.getContainerIpAddress(), cassandraContainer.getMappedPort(9042)))
-                    .withLocalDatacenter("datacenter1")
-                    .build();
-            createKeySpace();
-            createTable(KEYS);
-            createTable(USED_KEYS);
-        }
-    }
-
-    private void createKeySpace() {
-        CreateKeyspace createKeyspace = SchemaBuilder.createKeyspace("baby_url")
-                .ifNotExists()
-                .withSimpleStrategy(1);
-
-        cqlSession.execute(createKeyspace.build());
-        cqlSession.execute("use baby_url");
-    }
-
-    private void createTable(String tableName) {
-        CreateTable createTable = SchemaBuilder.createTable(tableName)
-                .ifNotExists()
-                .withPartitionKey("key", DataTypes.TEXT);
-        cqlSession.execute(createTable.build());
-    }
 
     @Test
     void shouldInsertKey() {
         CassandraKeyGeneratorRepository cassandraKeyGeneratorRepository = new CassandraKeyGeneratorRepository(cqlSession);
         boolean isInserted = cassandraKeyGeneratorRepository.insertKey(KEY_VALUE);
         assertTrue(isInserted);
-        assertTrue(cassandraContainer.isRunning());
     }
 
     @Test
@@ -150,6 +103,5 @@ class CassandraKeyGeneratorRepositoryTest {
     private void deleteAll(String tableName) {
         cqlSession.execute(QueryBuilder.truncate(tableName).build());
     }
-
 
 }

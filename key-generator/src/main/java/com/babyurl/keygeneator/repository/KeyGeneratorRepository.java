@@ -1,4 +1,4 @@
-package com.babyurl.repository;
+package com.babyurl.keygeneator.repository;
 
 import java.util.List;
 
