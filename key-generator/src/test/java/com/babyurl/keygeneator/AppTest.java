@@ -18,9 +18,6 @@ class KeyGeneratorAPITest {
     @Test
     void testItWorks() {
         Assertions.assertTrue(application.isRunning());
-
-        // verify CI
-        fail("Check GitHub CI Integration");
     }
 
 }
