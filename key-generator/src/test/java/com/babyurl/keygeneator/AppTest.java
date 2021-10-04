@@ -6,6 +6,9 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+
 @MicronautTest
 class KeyGeneratorAPITest {
 
@@ -15,6 +18,9 @@ class KeyGeneratorAPITest {
     @Test
     void testItWorks() {
         Assertions.assertTrue(application.isRunning());
+
+        // verify CI
+        fail("Check GitHub CI Integration");
     }
 
 }
