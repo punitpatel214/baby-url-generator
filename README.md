@@ -17,26 +17,4 @@ Baby URL Generator creates shorter url for long URLs. We call these shortened ur
   - Data is relatively small 
   - in future billions of Records
   
-   Relational Database : CA
-   
-   Mongo, Hbase, Redis: CP (Master/Slave)
-   
-   Casandra, Riak, CouchDB AP
-   
-   https://www.slideshare.net/EdurekaIN/no-sql-databases-35591065
-   
-   https://www.youtube.com/watch?v=QlqylUeqeis
-   
-   https://www.instaclustr.com/cassandra-vs-mongodb/
-
-   Use Casandra for Baby URL Generation Service 
-   
-  **For Key Generation Service**
-    - We can Use Casandra with ZooKeeper as we have 2 table 1 for unused keys and other for used keys.
-    - second option MongoDB or equivalent CP based NoSQL DB.
-    - RDBMS can be used.
-    
-  **Strategy to generate keys offline**
-    - Use Base62 with random, in this case need to POC how many records we can generate in DB.
-    - Generate all possible keys and shuffle them, in that case, more storage required to save DB.
-    - The best solution that we can generate 5 million records and generate more when some threshold reaches.
+---
