@@ -1,4 +1,4 @@
-package com.babyurl;
+package com.babyurl.keygeneator;
 
 import io.micronaut.runtime.Micronaut;
 

@@ -1,16 +1,14 @@
-package com.babyurl.cache;
+package com.babyurl.keygeneator.cache;
 
-import com.babyurl.repository.KeyGeneratorRepository;
+import com.babyurl.keygeneator.repository.KeyGeneratorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;

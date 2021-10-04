@@ -1,6 +1,6 @@
-package com.babyurl.cache;
+package com.babyurl.keygeneator.cache;
 
-import com.babyurl.repository.KeyGeneratorRepository;
+import com.babyurl.keygeneator.repository.KeyGeneratorRepository;
 import io.micronaut.context.annotation.Value;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Singleton;
@@ -17,10 +17,10 @@ public class KeyCache {
     private final KeyGeneratorRepository keyGeneratorRepository;
     private final ConcurrentLinkedQueue<String> concurrentLinkedQueue;
     private final int maxCacheSize;
-    private AtomicInteger cacheSize;
+    private final AtomicInteger cacheSize;
     private boolean cacheReloadInProcess = false;
 
-    public KeyCache(KeyGeneratorRepository keyGeneratorRepository,  @Value("${my.engine.cylinders:10}") int maxCacheSize) {
+    public KeyCache(KeyGeneratorRepository keyGeneratorRepository,  @Value("${maxCacheSize:10}") int maxCacheSize) {
         this.keyGeneratorRepository = keyGeneratorRepository;
         this.maxCacheSize = maxCacheSize;
         this.concurrentLinkedQueue = new ConcurrentLinkedQueue<>();

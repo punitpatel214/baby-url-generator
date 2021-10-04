@@ -1,6 +1,6 @@
-package com.babyurl.api;
+package com.babyurl.keygeneator.api;
 
-import com.babyurl.service.KeyGeneratorService;
+import com.babyurl.keygeneator.service.KeyGeneratorService;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 

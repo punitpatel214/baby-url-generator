@@ -1,7 +1,7 @@
-package com.babyurl.service;
+package com.babyurl.keygeneator.service;
 
-import com.babyurl.cache.KeyCache;
-import com.babyurl.repository.KeyGeneratorRepository;
+import com.babyurl.keygeneator.cache.KeyCache;
+import com.babyurl.keygeneator.repository.KeyGeneratorRepository;
 import jakarta.inject.Singleton;
 
 @Singleton

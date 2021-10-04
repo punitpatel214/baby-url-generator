@@ -1,4 +1,4 @@
-package com.babyurl.repository.casandra;
+package com.babyurl.keygeneator.idgenerator;
 
 import jakarta.inject.Singleton;
 
