@@ -36,8 +36,9 @@ class KeyCacheTest {
     }
 
     @Test
-    void shouldGetKeyFromReloadCache() {
+    void shouldGetKeyFromReloadCache() throws InterruptedException {
         IntStream.range(0, 4).forEach(index -> keyCache.getKey());
+        Thread.sleep(100);
         verify(keyGeneratorRepository, times(2)).getKeys(4);
     }
 }

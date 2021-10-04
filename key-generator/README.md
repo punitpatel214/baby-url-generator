@@ -1,12 +1,13 @@
-## Micronaut 3.0.2 Documentation
+# Key Generator  Service
+Key Generator Service generate unique keys offline. On request, it gives random key from  offline keys.
+Service cache some keys in memory for performance.  
 
-- [User Guide](https://docs.micronaut.io/3.0.2/guide/index.html)
-- [API Reference](https://docs.micronaut.io/3.0.2/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/3.0.2/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
+- store offline keys in keys table and move used key in another table 
+
+
+**Strategy to generate keys offline**
+- Use Base62 with random, in this case need to POC how many records we can generate in DB.
+- Generate all possible keys and shuffle them, in that case, more storage required to save DB.
+- we can generate some amount of keys (50 millions) and based on use will generate more keys by job  
 ---
-
-## Feature http-client documentation
-
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
 
