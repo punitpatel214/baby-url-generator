@@ -28,15 +28,13 @@ public class BaseCassandraContainerTest {
     }
 
     protected void dataSetup() {
-        if (cqlSession == null) {
-            cqlSession = CqlSession.builder()
-                    .addContactPoint(new InetSocketAddress(cassandraContainer.getContainerIpAddress(), cassandraContainer.getMappedPort(9042)))
-                    .withLocalDatacenter("datacenter1")
-                    .build();
-            createKeySpace();
-            createTable(KEYS);
-            createTable(USED_KEYS);
-        }
+        cqlSession = CqlSession.builder()
+                .addContactPoint(new InetSocketAddress(cassandraContainer.getContainerIpAddress(), cassandraContainer.getMappedPort(9042)))
+                .withLocalDatacenter("datacenter1")
+                .build();
+        createKeySpace();
+        createTable(KEYS);
+        createTable(USED_KEYS);
     }
 
     private void createKeySpace() {

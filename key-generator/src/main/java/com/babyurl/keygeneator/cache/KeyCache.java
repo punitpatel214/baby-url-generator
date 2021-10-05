@@ -7,9 +7,12 @@ import jakarta.inject.Singleton;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.Optional.ofNullable;
+import static java.util.concurrent.CompletableFuture.runAsync;
 
 @Singleton
 public class KeyCache {
@@ -18,37 +21,37 @@ public class KeyCache {
     private final ConcurrentLinkedQueue<String> concurrentLinkedQueue;
     private final int maxCacheSize;
     private final AtomicInteger cacheSize;
-    private boolean cacheReloadInProcess = false;
+    private AtomicBoolean cacheReloadInProcess;
 
     public KeyCache(KeyGeneratorRepository keyGeneratorRepository,  @Value("${maxCacheSize:10}") int maxCacheSize) {
         this.keyGeneratorRepository = keyGeneratorRepository;
         this.maxCacheSize = maxCacheSize;
         this.concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
         this.cacheSize = new AtomicInteger();
+        cacheReloadInProcess = new AtomicBoolean(false);
     }
 
     @PostConstruct
-    public void init() {
-        if (cacheReloadInProcess) {
+    public void loadCache() {
+        if (cacheReloadInProcess.get()) {
             return;
         }
-        cacheReloadInProcess = true;
+        cacheReloadInProcess.set(true);
         List<String> keys = keyGeneratorRepository.getKeys(maxCacheSize);
         concurrentLinkedQueue.addAll(keys);
-        int size = concurrentLinkedQueue.size();
-        cacheSize.set(size);
-        cacheReloadInProcess = false;
+        cacheSize.set(concurrentLinkedQueue.size());
+        cacheReloadInProcess.set(false);
     }
 
     public Optional<String> getKey() {
         ensureCacheCapacity(cacheSize.decrementAndGet());
-        return Optional.ofNullable(concurrentLinkedQueue.poll());
+        return ofNullable(concurrentLinkedQueue.poll());
     }
 
     private void ensureCacheCapacity(int cacheSize) {
         if (cacheSize > (maxCacheSize * 0.5)) {
             return;
         }
-        CompletableFuture.runAsync(this::init);
+        runAsync(this::loadCache);
     }
 }

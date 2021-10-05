@@ -26,7 +26,7 @@ class KeyCacheTest {
     void setUp() {
         when(keyGeneratorRepository.getKeys(4)).thenReturn(asList("Key1", "Key2", "Key3", "Key4"));
         keyCache = new KeyCache(keyGeneratorRepository, 4);
-        keyCache.init();
+        keyCache.loadCache();
     }
 
     @Test
