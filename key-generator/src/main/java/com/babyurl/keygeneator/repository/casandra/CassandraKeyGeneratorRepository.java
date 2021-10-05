@@ -1,5 +1,6 @@
 package com.babyurl.keygeneator.repository.casandra;
 
+import com.babyurl.keygeneator.exception.KeyNotFoundException;
 import com.babyurl.keygeneator.repository.KeyGeneratorRepository;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
@@ -9,7 +10,6 @@ import com.datastax.oss.driver.api.querybuilder.select.Select;
 import jakarta.inject.Singleton;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.insertInto;
@@ -43,7 +43,7 @@ public class CassandraKeyGeneratorRepository implements KeyGeneratorRepository {
     public String getKey() {
         return getKeys(1).stream()
                 .findFirst()
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(KeyNotFoundException::new);
     }
 
     @Override
