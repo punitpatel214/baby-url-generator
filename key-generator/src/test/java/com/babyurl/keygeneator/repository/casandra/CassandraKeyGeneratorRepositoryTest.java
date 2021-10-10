@@ -1,31 +1,33 @@
 package com.babyurl.keygeneator.repository.casandra;
 
 import com.babyurl.keygeneator.exception.KeyNotFoundException;
+import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.select.Select;
-import org.junit.jupiter.api.BeforeAll;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@MicronautTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CassandraKeyGeneratorRepositoryTest extends BaseCassandraContainerTest {
 
     private static final String KEY_VALUE = "randomKey";
 
-    @BeforeAll
-    static void beforeAll() {
-        startCassandraContainer();
-    }
+    @Inject
+    private CqlSession cqlSession;
 
     @BeforeEach
     void setUp() {
-        super.dataSetup();
+        super.dataSetup(cqlSession);
         deleteAll(KEYS);
         deleteAll(USED_KEYS);
     }
@@ -72,7 +74,7 @@ class CassandraKeyGeneratorRepositoryTest extends BaseCassandraContainerTest {
     void shouldThrowKeyNotFoundExceptionWhenKeyIsNotInsertedInUsedKey() {
         CassandraKeyGeneratorRepository cassandraKeyGeneratorRepository = new CassandraKeyGeneratorRepository(cqlSession);
         cassandraKeyGeneratorRepository.insertKey(KEY_VALUE);
-        cqlSession.execute(String.format("insert into %s.usedKeys(key) values ('%s')", "baby_url", KEY_VALUE));
+        cqlSession.execute(String.format("insert into usedKeys(key) values ('%s')", KEY_VALUE));
 
         assertThrows(KeyNotFoundException.class, cassandraKeyGeneratorRepository::getKey);
     }

@@ -1,10 +1,11 @@
 package com.babyurl.keygeneator.api;
 
+import com.babyurl.keygeneator.Application;
 import com.babyurl.keygeneator.repository.casandra.BaseCassandraContainerTest;
 import com.datastax.oss.driver.api.core.CqlSession;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
-import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.support.TestPropertyProvider;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -18,34 +19,29 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@MicronautTest
+@MicronautTest(application = Application.class)
 @TestMethodOrder(OrderAnnotation.class)
-class KeyGeneratorAPITest extends BaseCassandraContainerTest {
-
-    private final KeyGeneratorClient keyGeneratorClient;
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class KeyGeneratorAPITest extends BaseCassandraContainerTest implements TestPropertyProvider {
 
     @Inject
-    public KeyGeneratorAPITest(KeyGeneratorClient keyGeneratorClient) {
-        this.keyGeneratorClient = keyGeneratorClient;
-    }
+    private KeyGeneratorClient keyGeneratorClient;
+
+    @Inject
+    private CqlSession cqlSession;
 
     private final List<String> keys = asList("key1", "key2", "key3", "key4");
 
-    @BeforeAll
-    static void beforeAll() {
-        startCassandraContainer();
-    }
-
     @BeforeEach
     void setUp() {
-        super.dataSetup();
+        super.dataSetup(cqlSession);
         cqlSession.execute(truncate("keys").build());
-        keys.forEach(key -> cqlSession.execute(String.format("insert into keys(key) values ('%s')", key)));
     }
 
     @Test
     @Order(1)
     void shouldGenerateKey() {
+        keys.forEach(key -> cqlSession.execute(String.format("insert into keys(key) values ('%s')", key)));
         List<String> generatedKeys = IntStream.range(0, keys.size())
                 .mapToObj(index -> keyGeneratorClient.generate())
                 .sorted()
@@ -55,13 +51,7 @@ class KeyGeneratorAPITest extends BaseCassandraContainerTest {
 
     @Test
     void shouldGenerateNoResponseIfAllKeysUsed() {
-        cqlSession.execute(truncate("keys").build());
         assertThrows(HttpClientResponseException.class, keyGeneratorClient::generate);
     }
 
-
-    @MockBean(CqlSession.class)
-    public CqlSession getCqlSession() {
-        return cqlSession;
-    }
 }

@@ -18,7 +18,6 @@ import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 @Singleton
 public class CassandraKeyGeneratorRepository implements KeyGeneratorRepository {
 
-    private static final String KEY_SPACE = "baby_url";
     private static final String KEYS_TABLE = "keys";
     public static final String USED_KEYS = "usedKeys";
     private final CqlSession cqlSession;
@@ -29,7 +28,7 @@ public class CassandraKeyGeneratorRepository implements KeyGeneratorRepository {
 
     @Override
     public boolean insertKey(String key) {
-        Insert insert = insertInto(KEY_SPACE, KEYS_TABLE)
+        Insert insert = insertInto(KEYS_TABLE)
                 .value("key", literal(key))
                 .ifNotExists();
         return cqlSession.execute(insert.build()).all()
@@ -55,7 +54,7 @@ public class CassandraKeyGeneratorRepository implements KeyGeneratorRepository {
     }
 
     private List<String> fetchRandomKey(int limit) {
-        Select select = QueryBuilder.selectFrom(KEY_SPACE, KEYS_TABLE)
+        Select select = QueryBuilder.selectFrom(KEYS_TABLE)
                 .column("key")
                 .limit(limit);
         return cqlSession.execute(select.build()).all()
@@ -65,7 +64,7 @@ public class CassandraKeyGeneratorRepository implements KeyGeneratorRepository {
     }
 
     private boolean insertInUsedKey(String key) {
-        Insert insert = insertInto(KEY_SPACE, USED_KEYS)
+        Insert insert = insertInto(USED_KEYS)
                 .value("key", literal(key))
                 .ifNotExists();
         return cqlSession.execute(insert.build()).all()
@@ -76,7 +75,7 @@ public class CassandraKeyGeneratorRepository implements KeyGeneratorRepository {
     }
 
     private boolean deleteKey(String key) {
-        Delete delete = QueryBuilder.deleteFrom(KEY_SPACE, KEYS_TABLE)
+        Delete delete = QueryBuilder.deleteFrom(KEYS_TABLE)
                 .whereColumn("key").isEqualTo(literal(key))
                 .ifExists();
         return cqlSession.execute(delete.build()).all()

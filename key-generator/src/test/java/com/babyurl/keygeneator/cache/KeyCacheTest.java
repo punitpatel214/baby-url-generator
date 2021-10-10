@@ -25,7 +25,7 @@ class KeyCacheTest {
     @BeforeEach
     void setUp() {
         when(keyGeneratorRepository.getKeys(4)).thenReturn(asList("Key1", "Key2", "Key3", "Key4"));
-        keyCache = new KeyCache(keyGeneratorRepository, 4);
+        keyCache = new KeyCache(keyGeneratorRepository, 4, 2);
         keyCache.loadCache();
     }
 
@@ -39,6 +39,6 @@ class KeyCacheTest {
     void shouldGetKeyFromReloadCache() throws InterruptedException {
         IntStream.range(0, 4).forEach(index -> keyCache.getKey());
         Thread.sleep(100);
-        verify(keyGeneratorRepository, times(2)).getKeys(4);
+        verify(keyGeneratorRepository, atLeast(2)).getKeys(4);
     }
 }
