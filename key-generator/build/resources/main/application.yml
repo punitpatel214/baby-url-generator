@@ -1,10 +1,19 @@
 micronaut:
   application:
-    name: babyUrlGenerator
+    name: key-generator
 cassandra:
   default:
-    clusterName: '"Test Cluster"'
-    contactPoint: '"127.0.0.1"'
-    port: 9042
-    maxSchemaAgreementWaitSeconds: 20
+    maxSchemaAgreementWaitSeconds: 100
     ssl: true
+    basic:
+      session-keyspace: "key_generator"
+      contact-points:
+        - "127.0.0.1:9042"
+      load-balancing-policy:
+        local-datacenter: "datacenter1"
+---
+cache:
+  maxSize: 50
+  minSize: 20
+
+---

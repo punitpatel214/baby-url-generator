@@ -20,12 +20,15 @@ public class KeyCache {
     private final KeyGeneratorRepository keyGeneratorRepository;
     private final ConcurrentLinkedQueue<String> concurrentLinkedQueue;
     private final int maxCacheSize;
+    private final int minCacheSize;
     private final AtomicInteger cacheSize;
-    private AtomicBoolean cacheReloadInProcess;
+    private final AtomicBoolean cacheReloadInProcess;
 
-    public KeyCache(KeyGeneratorRepository keyGeneratorRepository,  @Value("${maxCacheSize:10}") int maxCacheSize) {
+    public KeyCache(KeyGeneratorRepository keyGeneratorRepository, @Value("${cache.maxSize:10}") int maxCacheSize,
+                    @Value("${cache.minSize:10}") int minCacheSize) {
         this.keyGeneratorRepository = keyGeneratorRepository;
         this.maxCacheSize = maxCacheSize;
+        this.minCacheSize = minCacheSize;
         this.concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
         this.cacheSize = new AtomicInteger();
         cacheReloadInProcess = new AtomicBoolean(false);
@@ -49,7 +52,7 @@ public class KeyCache {
     }
 
     private void ensureCacheCapacity(int cacheSize) {
-        if (cacheSize > (maxCacheSize * 0.5)) {
+        if (cacheSize < minCacheSize) {
             return;
         }
         runAsync(this::loadCache);
