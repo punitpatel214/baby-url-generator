@@ -36,7 +36,7 @@ dependencies {
 
 
 application {
-    mainClass.set("com.babyurl.Application")
+    mainClass.set("com.babyurl.keygeneator.Application")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("11")
