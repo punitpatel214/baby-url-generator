@@ -8,7 +8,7 @@ cassandra:
     basic:
       session-keyspace: "key_generator"
       contact-points:
-        - "127.0.0.1:9042"
+        - "127.0.0.1:8080"
       load-balancing-policy:
         local-datacenter: "datacenter1"
 ---

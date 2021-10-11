@@ -36,12 +36,9 @@ dependencies {
 
 
 application {
-    mainClass.set("com.babyurl.keygeneator.Application")
+    mainClass.set("com.babyurl.urlshortener.Application")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("11")
     targetCompatibility = JavaVersion.toVersion("11")
 }
-
-
-
