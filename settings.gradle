@@ -1,3 +1,4 @@
 
 rootProject.name="baby-url-generator"
 include 'key-generator'
+include 'url-shortener'

@@ -1,8 +1,6 @@
 micronaut:
   application:
     name: key-generator
-  server:
-    port: 8081
 cassandra:
   default:
     maxSchemaAgreementWaitSeconds: 100
@@ -10,12 +8,9 @@ cassandra:
     basic:
       session-keyspace: "key_generator"
       contact-points:
-        - "127.0.0.1:8080"
+        - "127.0.0.1:9042"
       load-balancing-policy:
         local-datacenter: "datacenter1"
-
-test:
-  property: nik
 ---
 cache:
   maxSize: 50
