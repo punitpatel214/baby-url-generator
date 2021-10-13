@@ -2,7 +2,7 @@ micronaut:
   application:
     name: key-generator
   server:
-    port: 8081
+    port: 8082
 cassandra:
   default:
     maxSchemaAgreementWaitSeconds: 100

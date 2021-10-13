@@ -3,6 +3,8 @@ package com.babyurl.keygeneator.repository.casandra;
 import com.babyurl.keygeneator.exception.KeyNotFoundException;
 import com.babyurl.keygeneator.repository.KeyGeneratorRepository;
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.delete.Delete;
 import com.datastax.oss.driver.api.querybuilder.insert.Insert;
@@ -31,11 +33,9 @@ public class CassandraKeyGeneratorRepository implements KeyGeneratorRepository {
         Insert insert = insertInto(KEYS_TABLE)
                 .value("key", literal(key))
                 .ifNotExists();
-        return cqlSession.execute(insert.build()).all()
-                .stream()
-                .findFirst()
-                .map(row -> row.getBoolean(0))
-                .orElse(false);
+        Row firstRow = cqlSession.execute(insert.build())
+                .one();
+        return firstRow != null && firstRow.getBoolean(0);
     }
 
     @Override

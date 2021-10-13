@@ -7,7 +7,6 @@ import io.micronaut.http.HttpRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
@@ -31,7 +30,7 @@ class UrlShortenerAPITest {
     void shouldGenerateBabyURLWithRequestBasePath() {
         String originalURL = "http://originalURL";
         ShortenURLData shortenURLData = new ShortenURLData("key", originalURL, Duration.ofDays(1));
-        when(urlShortenerService.shortenURL(originalURL)).thenReturn(shortenURLData);
+        when(urlShortenerService.shortURL(originalURL)).thenReturn(shortenURLData);
         when(redirectionUrlResolver.resolve(httpRequest)).thenReturn("http://domain/");
 
         String redirectionURL = new UrlShortenerAPI(urlShortenerService, redirectionUrlResolver)

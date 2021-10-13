@@ -4,11 +4,11 @@ import com.babyurl.urlshortener.model.ShortenURLData;
 import com.babyurl.urlshortener.resolver.RedirectionUrlResolver;
 import com.babyurl.urlshortener.service.UrlShortenerService;
 import io.micronaut.http.HttpRequest;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
+
+import javax.validation.constraints.NotBlank;
 
 @Controller
 public class UrlShortenerAPI {
@@ -22,10 +22,10 @@ public class UrlShortenerAPI {
         this.redirectionUrlResolver = redirectionUrlResolver;
     }
 
-    @Post("/shortenURL")
-    public String shortURL(@Body String originalURL, HttpRequest<String> httpRequest) {
-        ShortenURLData shortenURLData = urlShortenerService.shortenURL(originalURL);
-        return redirectionUrlResolver.resolve(httpRequest) + shortenURLData.key;
+    @Post(value = "/shortenURL", consumes = MediaType.TEXT_PLAIN, produces = MediaType.TEXT_PLAIN)
+    public String shortURL(@Body @NotBlank String originalURL, HttpRequest<String> httpRequest) {
+        ShortenURLData shortenURLData = urlShortenerService.shortURL(originalURL);
+        return redirectionUrlResolver.resolve(httpRequest).concat(shortenURLData.key);
     }
 
 }

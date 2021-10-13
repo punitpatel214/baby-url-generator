@@ -14,7 +14,7 @@ public class KeyNotExceptionHandler implements ExceptionHandler<KeyNotFoundExcep
 
     @Override
     public HttpResponse<?> handle(HttpRequest request, KeyNotFoundException exception) {
-       return HttpResponse.noContent();
+       return HttpResponse.serverError("Key Not Found");
     }
 
 }
