@@ -20,7 +20,7 @@ class IdGeneratorTest {
 
 
     @Test
-//    @Disabled
+    @Disabled
     void generateKeys() {
         int failureAttempt = 0;
         while (failureAttempt < 100) {
