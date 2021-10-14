@@ -13,13 +13,13 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BaseURLRedirectionUrlResolverTest {
+class BaseURLRedirectionUrlResolverTest<T> {
 
     @Mock
     private HttpHostResolver httpHostResolver;
 
     @Mock
-    private HttpRequest<Object> httpRequest;
+    private HttpRequest<T> httpRequest;
 
     @Test
     void shouldCreateBaseURLAsRedirectionURL() {
@@ -33,8 +33,6 @@ class BaseURLRedirectionUrlResolverTest {
 
 
     @Test
-    @Disabled
-    // FIXME This test pass on local but fail on github action need to find rca and fix it
     void shouldCreateBaseURLAsRedirectionURLWithContextPath() {
         when(httpHostResolver.resolve(eq(httpRequest))).thenReturn("http://base_url");
 
