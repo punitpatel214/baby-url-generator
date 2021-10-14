@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static com.babyurl.urlshortener.repositiry.cassandra.ShortenURLTableMetaData.*;
+import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.*;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createKeyspace;
 
 public abstract class BaseCassandraContainerTest implements TestPropertyProvider {
@@ -51,7 +52,7 @@ public abstract class BaseCassandraContainerTest implements TestPropertyProvider
     }
 
     private SimpleStatement createTableStatement() {
-        return SchemaBuilder.createTable(tableName)
+        return createTable(tableName)
                 .ifNotExists()
                 .withPartitionKey(KEY.columnName, KEY.dataType)
                 .withColumn(URL.columnName, URL.dataType)

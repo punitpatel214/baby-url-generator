@@ -10,7 +10,7 @@ import jakarta.inject.Singleton;
 @Produces
 @Singleton
 @Requires(classes = {KeyNotFoundException.class, ExceptionHandler.class})
-public class KeyNotExceptionHandler implements ExceptionHandler<KeyNotFoundException, HttpResponse<?>> {
+public class KeyNotFoundExceptionHandler implements ExceptionHandler<KeyNotFoundException, HttpResponse<?>> {
 
     @Override
     public HttpResponse<?> handle(HttpRequest request, KeyNotFoundException exception) {
