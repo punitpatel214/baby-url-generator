@@ -2,16 +2,23 @@ package com.babyurl.urlshortener.api;
 
 import com.babyurl.urlshortener.client.KeyGeneratorClient;
 import com.babyurl.urlshortener.repositiry.cassandra.BaseCassandraContainerTest;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.client.exceptions.HttpClientException;
+import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.time.Instant;
+
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.update;
+import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -27,9 +34,9 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
         String url = "/test/long/url";
         generateShortURL(url)
                 .verifyRedirection()
+                .verifyExpireURLResponse()
                 .verifyNoRedirection();
     }
-
 
     private APIIntegrationTest generateShortURL(String url) {
         String shortenURL = urlShortenerAPIClient.shortenURL(url);
@@ -43,6 +50,17 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
         assertEquals("redirectSuccess", httpResponse.getBody().orElseThrow());
         return this;
     }
+
+    private APIIntegrationTest verifyExpireURLResponse() {
+        expireURL(KEY);
+        HttpClientResponseException httpClientResponseException = assertThrows(HttpClientResponseException.class, () -> urlShortenerAPIClient.get(KEY));
+        HttpResponse<?> httpResponse = httpClientResponseException.getResponse();
+        assertEquals(HttpStatus.GONE, httpResponse.getStatus());
+        assertEquals("URL is expired", httpResponse.getBody().orElseThrow());
+        return this;
+    }
+
+
 
     private void verifyNoRedirection() {
         HttpResponse<String> httpResponse = urlShortenerAPIClient.get("notFoundKey");
