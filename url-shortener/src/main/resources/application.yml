@@ -1,3 +1,19 @@
 micronaut:
   application:
-    name: demo
+    name: url-shortener
+cassandra:
+  default:
+    maxSchemaAgreementWaitSeconds: 100
+    ssl: true
+    basic:
+      session-keyspace: "url_shortener"
+      contact-points:
+        - "127.0.0.1:9042"
+      load-balancing-policy:
+        local-datacenter: "datacenter1"
+#redirect:
+#  domain: "http://baby.ul/"
+
+keygenerator:
+  api:
+    url: "http://localhost:8081"

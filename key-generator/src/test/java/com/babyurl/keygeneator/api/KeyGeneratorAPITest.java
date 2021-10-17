@@ -3,6 +3,7 @@ package com.babyurl.keygeneator.api;
 import com.babyurl.keygeneator.Application;
 import com.babyurl.keygeneator.repository.casandra.BaseCassandraContainerTest;
 import com.datastax.oss.driver.api.core.CqlSession;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.test.support.TestPropertyProvider;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -51,7 +54,13 @@ class KeyGeneratorAPITest extends BaseCassandraContainerTest implements TestProp
 
     @Test
     void shouldGenerateNoResponseIfAllKeysUsed() {
-        assertThrows(HttpClientResponseException.class, keyGeneratorClient::generate);
+        HttpClientResponseException httpClientResponseException = assertThrows(HttpClientResponseException.class, keyGeneratorClient::generate);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, httpClientResponseException.getStatus());
+        String body = httpClientResponseException.getResponse()
+                .getBody()
+                .map(String::valueOf)
+                .orElseThrow(NoSuchElementException::new);
+        assertEquals("Key Not Found", body);
     }
 
 }
