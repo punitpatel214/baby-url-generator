@@ -13,8 +13,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@Disabled
-// FIXME Find RCA why this test fail on ci
 class BaseURLRedirectionUrlResolverTest {
 
     @Mock
@@ -25,7 +23,7 @@ class BaseURLRedirectionUrlResolverTest {
 
     @Test
     void shouldCreateBaseURLAsRedirectionURL() {
-        when(httpHostResolver.resolve((httpRequest))).thenReturn("http://base_url");
+        when(httpHostResolver.resolve((eq(httpRequest)))).thenReturn("http://base_url");
 
         BaseURLRedirectionUrlResolver redirectionUrlResolver = new BaseURLRedirectionUrlResolver(httpHostResolver, "");
         String resolve = redirectionUrlResolver.resolve(httpRequest);
