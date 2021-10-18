@@ -29,7 +29,7 @@ class RedirectionAPITest {
         when(redirectionService.findRedirection("key")).thenReturn(of(redirection));
 
         RedirectionAPI redirectionAPI = new RedirectionAPI(redirectionService);
-        HttpResponse<Object> httpResponse = redirectionAPI.redirect(redirection.getKey());
+        HttpResponse<Object> httpResponse = redirectionAPI.redirectURL(redirection.getKey());
 
         assertEquals(HttpStatus.MOVED_PERMANENTLY, httpResponse.getStatus());
         assertEquals(redirection.getUrl(), httpResponse.getHeaders().get("location"));
@@ -40,8 +40,20 @@ class RedirectionAPITest {
         when(redirectionService.findRedirection("key")).thenReturn(empty());
 
         RedirectionAPI redirectionAPI = new RedirectionAPI(redirectionService);
-        HttpResponse<Object> httpResponse = redirectionAPI.redirect("key");
+        HttpResponse<Object> httpResponse = redirectionAPI.redirectURL("key");
 
         assertEquals(HttpStatus.NOT_FOUND, httpResponse.getStatus());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenURLIsExpired() {
+        Redirection redirection = new Redirection("key", "redirectionURL", now().minusSeconds(1));
+        when(redirectionService.findRedirection("key")).thenReturn(of(redirection));
+
+        RedirectionAPI redirectionAPI = new RedirectionAPI(redirectionService);
+        HttpResponse<Object> httpResponse = redirectionAPI.redirectURL(redirection.getKey());
+
+        assertEquals(HttpStatus.GONE, httpResponse.getStatus());
+        assertEquals("URL is expired", httpResponse.getBody().orElseThrow());
     }
 }

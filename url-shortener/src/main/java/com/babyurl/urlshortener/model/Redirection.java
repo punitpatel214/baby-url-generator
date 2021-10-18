@@ -1,5 +1,6 @@
 package com.babyurl.urlshortener.model;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 
 public class Redirection {
@@ -23,5 +24,13 @@ public class Redirection {
 
     public LocalDateTime getExpiryTime() {
         return expiryTime;
+    }
+
+    public URI getURI() {
+        return URI.create(url);
+    }
+
+    public boolean isExpired() {
+        return expiryTime.isBefore(LocalDateTime.now());
     }
 }

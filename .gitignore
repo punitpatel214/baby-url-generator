@@ -1,14 +1,30 @@
-# Compiled class file
-*.class
-
-# Log file
+dist/
+.DS_Store
+target/
+.gradle/
+.idea/
+build/
+classes/
+out/
+*.db
 *.log
+*.iml
+.classpath
+.factorypath
+bin/
+.settings/
+.project
+*/test/
+*/META-INF/
+*.ipr
+*.iws
+
+
+#Compiled class file
+*.class
 
 # BlueJ files
 *.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
 
 # Package Files #
 *.jar
