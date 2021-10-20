@@ -2,11 +2,9 @@ package com.babyurl.urlshortener.api;
 
 import com.babyurl.urlshortener.client.KeyGeneratorClient;
 import com.babyurl.urlshortener.repositiry.cassandra.BaseCassandraContainerTest;
-import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
+import io.lettuce.core.RedisClient;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.client.exceptions.HttpClientException;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -14,10 +12,6 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.time.Instant;
-
-import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
-import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.update;
 import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest
@@ -28,6 +22,9 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
 
     @Inject
     private UrlShortenerAPIClient urlShortenerAPIClient;
+
+    @Inject
+    private RedisClient redisClient;
 
     @Test
     void shouldShortenURL() {
@@ -53,6 +50,7 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
 
     private APIIntegrationTest verifyExpireURLResponse() {
         expireURL(KEY);
+        redisClient.connect().sync().del("urls:" + KEY);
         HttpClientResponseException httpClientResponseException = assertThrows(HttpClientResponseException.class, () -> urlShortenerAPIClient.get(KEY));
         HttpResponse<?> httpResponse = httpClientResponseException.getResponse();
         assertEquals(HttpStatus.GONE, httpResponse.getStatus());
