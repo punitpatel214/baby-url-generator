@@ -19,6 +19,7 @@ import java.util.Map;
 import static com.babyurl.urlshortener.repositiry.cassandra.ShortenURLTableMetaData.*;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.update;
+import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.*;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createKeyspace;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createTable;
 
