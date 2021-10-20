@@ -1,9 +1,10 @@
 package com.babyurl.urlshortener.model;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.time.LocalDateTime;
 
-public class Redirection {
+public class Redirection implements Serializable {
     private final String key;
     private final String url;
     private final LocalDateTime expiryTime;

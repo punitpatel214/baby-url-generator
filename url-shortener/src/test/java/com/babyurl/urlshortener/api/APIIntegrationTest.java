@@ -2,6 +2,9 @@ package com.babyurl.urlshortener.api;
 
 import com.babyurl.urlshortener.client.KeyGeneratorClient;
 import com.babyurl.urlshortener.repositiry.cassandra.BaseCassandraContainerTest;
+import io.lettuce.core.RedisClient;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import io.micronaut.http.HttpResponse;
@@ -29,6 +32,9 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
     @Inject
     private UrlShortenerAPIClient urlShortenerAPIClient;
 
+    @Inject
+    private RedisClient redisClient;
+
     @Test
     void shouldShortenURL() {
         String url = "/test/long/url";
@@ -53,6 +59,7 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
 
     private APIIntegrationTest verifyExpireURLResponse() {
         expireURL(KEY);
+        redisClient.connect().sync().del("urls:" + KEY);
         HttpClientResponseException httpClientResponseException = assertThrows(HttpClientResponseException.class, () -> urlShortenerAPIClient.get(KEY));
         HttpResponse<?> httpResponse = httpClientResponseException.getResponse();
         assertEquals(HttpStatus.GONE, httpResponse.getStatus());

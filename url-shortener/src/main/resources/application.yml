@@ -14,6 +14,15 @@ cassandra:
 #redirect:
 #  domain: "http://baby.ul/"
 
+redis:
+  uri: redis://localhost
+  ssl: true
+  timeout: 30s
+  caches:
+    urls:
+      #expire one hour after write
+      expire-after-write: 1h
+
 keygenerator:
   api:
-    url: "http://localhost:8081"
+    url: "http://localhost:8082"

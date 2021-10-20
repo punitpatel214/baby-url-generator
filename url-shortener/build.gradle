@@ -27,11 +27,13 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api")
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut.redis:micronaut-redis-lettuce")
 
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.mockito:mockito-junit-jupiter")
     testImplementation "org.testcontainers:cassandra:1.16.0"
     testImplementation "org.testcontainers:junit-jupiter:1.16.0"
+    testImplementation "com.github.kstyrc:embedded-redis:0.6"
 }
 
 
