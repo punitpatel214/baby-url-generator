@@ -3,21 +3,16 @@ package com.babyurl.urlshortener.api;
 import com.babyurl.urlshortener.client.KeyGeneratorClient;
 import com.babyurl.urlshortener.repositiry.cassandra.BaseCassandraContainerTest;
 import io.lettuce.core.RedisClient;
+import io.micronaut.context.annotation.Property;
+import io.micronaut.context.annotation.Value;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
-import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
-import io.micronaut.http.client.exceptions.HttpClientException;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-
-import java.time.Instant;
 
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.update;
@@ -40,8 +35,12 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
         String url = "/test/long/url";
         generateShortURL(url)
                 .verifyRedirection()
+                .verifyCacheRedirection()
+                .removeFromCache()
+                .generateShortURL(url)
+                .expiryUrlDB()
                 .verifyExpireURLResponse()
-                .verifyNoRedirection();
+                .verifyNoRedirectionOfUnknownURL();
     }
 
     private APIIntegrationTest generateShortURL(String url) {
@@ -57,9 +56,12 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
         return this;
     }
 
+    private APIIntegrationTest verifyCacheRedirection() {
+        deleteAllURLS();
+        return verifyRedirection();
+    }
+
     private APIIntegrationTest verifyExpireURLResponse() {
-        expireURL(KEY);
-        redisClient.connect().sync().del("urls:" + KEY);
         HttpClientResponseException httpClientResponseException = assertThrows(HttpClientResponseException.class, () -> urlShortenerAPIClient.get(KEY));
         HttpResponse<?> httpResponse = httpClientResponseException.getResponse();
         assertEquals(HttpStatus.GONE, httpResponse.getStatus());
@@ -67,9 +69,17 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
         return this;
     }
 
+    private APIIntegrationTest expiryUrlDB() {
+        expireUrl(KEY);
+        return this;
+    }
 
+    private APIIntegrationTest removeFromCache() {
+        redisClient.connect().sync().del("urls:"+KEY);
+        return this;
+    }
 
-    private void verifyNoRedirection() {
+    private void verifyNoRedirectionOfUnknownURL() {
         HttpResponse<String> httpResponse = urlShortenerAPIClient.get("notFoundKey");
         assertEquals(HttpStatus.NOT_FOUND, httpResponse.getStatus());
     }

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

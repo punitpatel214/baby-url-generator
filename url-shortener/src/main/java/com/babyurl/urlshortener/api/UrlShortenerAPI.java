@@ -9,6 +9,7 @@ import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 
 import javax.validation.constraints.NotBlank;
+import java.net.URL;
 
 @Controller
 public class UrlShortenerAPI {

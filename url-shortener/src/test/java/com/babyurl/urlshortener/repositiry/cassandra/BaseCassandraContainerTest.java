@@ -2,6 +2,7 @@ package com.babyurl.urlshortener.repositiry.cassandra;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.io.socket.SocketUtils;
@@ -19,7 +20,6 @@ import java.util.Map;
 import static com.babyurl.urlshortener.repositiry.cassandra.ShortenURLTableMetaData.*;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.update;
-import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.*;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createKeyspace;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createTable;
 
@@ -65,12 +65,16 @@ public abstract class BaseCassandraContainerTest implements TestPropertyProvider
                 .build();
     }
 
-    protected void expireURL(String value) {
+    protected void expireUrl(String value) {
         getCqlSession().execute(update(tableName)
                 .setColumn(EXPIRY_TIME.columnName, literal(Instant.now().minusSeconds(1)))
                 .whereColumn(KEY.columnName)
                 .isEqualTo(literal(value))
                 .build());
+    }
+
+    protected void deleteAllURLS() {
+        getCqlSession().execute(QueryBuilder.truncate(tableName).build());
     }
 
     @Override
