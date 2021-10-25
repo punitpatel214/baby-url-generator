@@ -85,7 +85,7 @@ public abstract class BaseCassandraContainerTest implements TestPropertyProvider
         startRedis(redisPort);
         String contactPoints = cassandraContainer.getContainerIpAddress() + ":" + cassandraContainer.getMappedPort(9042);
         return Map.of("cassandra.default.basic.contact-points", Collections.singletonList(contactPoints),
-                "redis.port", redisPort);
+                "redis.uri", "redis://localhost:" +redisPort);
     }
 
     private void startRedis(int redisPort) {
