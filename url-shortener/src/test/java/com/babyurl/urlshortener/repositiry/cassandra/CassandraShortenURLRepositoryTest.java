@@ -16,7 +16,7 @@ import java.util.Optional;
 import static com.babyurl.urlshortener.repositiry.cassandra.ShortenURLTableMetaData.tableName;
 import static org.junit.jupiter.api.Assertions.*;
 
-@MicronautTest
+@MicronautTest(startApplication = false)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CassandraShortenURLRepositoryTest extends BaseCassandraContainerTest {
 

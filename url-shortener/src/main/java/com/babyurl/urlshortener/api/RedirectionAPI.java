@@ -28,7 +28,8 @@ public class RedirectionAPI {
         if (redirection.isExpired()) {
             return status(HttpStatus.GONE).body("URL is expired");
         }
-        return redirect(redirection.getURI());
+        return redirect(redirection.getURI())
+                .header("Cache-Control", "no-store");
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@MicronautTest
+@MicronautTest(startApplication = false)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CassandraKeyGeneratorRepositoryTest extends BaseCassandraContainerTest {
 
