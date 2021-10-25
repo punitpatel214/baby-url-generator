@@ -2,20 +2,24 @@ package com.babyurl.urlshortener.api;
 
 import com.babyurl.urlshortener.client.KeyGeneratorClient;
 import com.babyurl.urlshortener.repositiry.cassandra.BaseCassandraContainerTest;
+import com.google.common.collect.ImmutableMap;
 import io.lettuce.core.RedisClient;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.io.socket.SocketUtils;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockserver.client.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.junit.jupiter.MockServerExtension;
+import redis.embedded.RedisServerBuilder;
+
+import java.util.Map;
 
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,23 +33,16 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
 
     private static final String KEY = "anyKey";
 
-    private  ClientAndServer clientAndServer;
-
     @Inject
     private UrlShortenerAPIClient urlShortenerAPIClient;
 
     @Inject
     private RedisClient redisClient;
 
-    @BeforeEach
-    void setUp(ClientAndServer clientAndServer) {
-        this.clientAndServer = clientAndServer;
-    }
-
     @Test
-    void shouldShortenURL() {
+    void shouldShortenURL(ClientAndServer clientAndServer) {
         String path = "/test/long/url";
-        mockRedirectionURL(path);
+        mockRedirectionURL(path, clientAndServer);
         String url = format("http://localhost:%d%s",  clientAndServer.getPort() , path);
         generateShortURL(url)
                 .verifyRedirection()
@@ -58,10 +55,10 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
                 .verifyBadRequestForInvalidURL();
     }
 
-    private void mockRedirectionURL(String path) {
-         new MockServerClient("localhost", clientAndServer.getPort())
-                .when(request().withMethod("GET")
-                        .withPath(path))
+    private void mockRedirectionURL(String path, ClientAndServer clientAndServer) {
+        clientAndServer.when(request().
+                withMethod("GET")
+                .withPath(path))
                 .respond(response("redirectSuccess"));
     }
 
@@ -114,7 +111,6 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
         HttpResponse<?> httpResponse = httpClientResponseException.getResponse();
         assertEquals(HttpStatus.BAD_REQUEST, httpResponse.getStatus());
         String responseBody = httpResponse.getBody().orElseThrow().toString();
-        System.out.println(responseBody);
         assertTrue(responseBody.contains(format("url: (%s) is not valid", invalidURL)));
         return this;
     }
@@ -122,5 +118,22 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
     @MockBean(KeyGeneratorClient.class)
     public KeyGeneratorClient keyGeneratorClient() {
         return () -> KEY;
+    }
+
+    @Override
+    @NonNull
+    public Map getProperties() {
+        int redisPort = SocketUtils.findAvailableTcpPort();
+        startRedis(redisPort);
+        return ImmutableMap.builder()
+                .putAll(super.getProperties())
+                .put("redis.uri", "redis://localhost:" + redisPort)
+                .build();
+    }
+
+    private void startRedis(int availableTcpPort) {
+        new RedisServerBuilder()
+                .port(availableTcpPort)
+                .build();
     }
 }

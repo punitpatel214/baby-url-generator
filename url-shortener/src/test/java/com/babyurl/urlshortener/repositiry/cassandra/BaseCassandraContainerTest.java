@@ -5,11 +5,9 @@ import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.schema.CreateKeyspace;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.core.io.socket.SocketUtils;
 import io.micronaut.test.support.TestPropertyProvider;
 import org.testcontainers.containers.CassandraContainer;
 import org.testcontainers.utility.DockerImageName;
-import redis.embedded.RedisServerBuilder;
 
 import java.net.InetSocketAddress;
 import java.time.Duration;
@@ -22,6 +20,7 @@ import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.literal;
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.update;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createKeyspace;
 import static com.datastax.oss.driver.api.querybuilder.SchemaBuilder.createTable;
+import static java.util.Collections.singletonList;
 
 public abstract class BaseCassandraContainerTest implements TestPropertyProvider {
     protected static final CassandraContainer<?> cassandraContainer = new CassandraContainer<>(DockerImageName.parse("cassandra:latest"))
@@ -81,16 +80,8 @@ public abstract class BaseCassandraContainerTest implements TestPropertyProvider
     @NonNull
     public Map getProperties() {
         startContainer();
-        int redisPort = SocketUtils.findAvailableTcpPort();
-        startRedis(redisPort);
         String contactPoints = cassandraContainer.getContainerIpAddress() + ":" + cassandraContainer.getMappedPort(9042);
-        return Map.of("cassandra.default.basic.contact-points", Collections.singletonList(contactPoints),
-                "redis.uri", "redis://localhost:" +redisPort);
+        return Map.of("cassandra.default.basic.contact-points", singletonList(contactPoints));
     }
 
-    private void startRedis(int redisPort) {
-        new RedisServerBuilder()
-                .port(redisPort)
-                .build().start();
-    }
 }
