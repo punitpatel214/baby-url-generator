@@ -38,11 +38,19 @@ dependencies {
     testImplementation "com.github.kstyrc:embedded-redis:0.6"
 }
 
-
 application {
-    mainClass.set("com.babyurl.urlshortener.Application")
+    mainClass.set("com.babyurl.urlshortener.URLShortenerApplication")
 }
+
 java {
     sourceCompatibility = JavaVersion.toVersion("11")
     targetCompatibility = JavaVersion.toVersion("11")
+}
+
+dockerBuildNative {
+    images = ["punitpatel/url-shortener-native"]
+}
+
+dockerBuild {
+    images = ["punitpatel/url-shortener"]
 }

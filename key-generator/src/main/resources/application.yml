@@ -3,6 +3,15 @@ micronaut:
     name: key-generator
   server:
     port: 8082
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+    cassandra:
+      enabled: true
+
 cassandra:
   default:
     maxSchemaAgreementWaitSeconds: 100
