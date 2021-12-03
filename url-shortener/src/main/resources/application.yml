@@ -1,6 +1,13 @@
 micronaut:
   application:
     name: url-shortener
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowedOrigins:
+            - http://localhost:3000
 cassandra:
   default:
     maxSchemaAgreementWaitSeconds: 100

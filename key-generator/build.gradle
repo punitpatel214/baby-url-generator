@@ -27,6 +27,7 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api")
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut:micronaut-management")
 
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.mockito:mockito-junit-jupiter")
@@ -34,13 +35,21 @@ dependencies {
     testImplementation "org.testcontainers:junit-jupiter:1.16.0"
 }
 
-
 application {
     mainClass.set("com.babyurl.keygeneator.Application")
 }
+
 java {
     sourceCompatibility = JavaVersion.toVersion("11")
     targetCompatibility = JavaVersion.toVersion("11")
+}
+
+dockerBuildNative {
+    images = ["punitpatel/key-generator-native"]
+}
+
+dockerBuild {
+    images = ["punitpatel/key-generator"]
 }
 
 
