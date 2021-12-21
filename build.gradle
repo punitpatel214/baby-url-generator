@@ -1,17 +1,17 @@
+plugins {
+    id "org.sonarqube" version "3.3"
+}
 
 version = "0.1"
 group = "com.babyurl"
 
-plugins {
-  id "org.sonarqube" version "3.3"
-}
 
 sonarqube {
-  properties {
-    property "sonar.projectKey", "punitpatel214_baby-url-generator"
-    property "sonar.organization", "punitpatel"
-    property "sonar.host.url", "https://sonarcloud.io"
-  }
+    properties {
+        property "sonar.projectKey", "punitpatel214_baby-url-generator"
+        property "sonar.organization", "punitpatel"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 subprojects {
