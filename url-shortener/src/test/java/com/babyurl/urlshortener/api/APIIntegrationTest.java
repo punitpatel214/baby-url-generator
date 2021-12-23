@@ -2,6 +2,8 @@ package com.babyurl.urlshortener.api;
 
 import com.babyurl.urlshortener.client.KeyGeneratorClient;
 import com.babyurl.urlshortener.repositiry.cassandra.BaseCassandraContainerTest;
+import com.babyurl.urlshortener.request.BabyURLRequest;
+import com.babyurl.urlshortener.response.BabyURLResponse;
 import com.google.common.collect.ImmutableMap;
 import io.lettuce.core.RedisClient;
 import io.micronaut.core.annotation.NonNull;
@@ -63,9 +65,14 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
     }
 
     private APIIntegrationTest generateShortURL(String url) {
-        String shortenURL = urlShortenerAPIClient.shortenURL(url);
-        assertTrue(shortenURL.endsWith(KEY));
+        BabyURLResponse babyURLResponse = urlShortenerAPIClient.shortenURL(babyURLRequestBody(url));
+        String babyURL = babyURLResponse.getBabyURL();
+        assertTrue(babyURL.endsWith(KEY));
         return this;
+    }
+
+    private BabyURLRequest babyURLRequestBody(String url) {
+        return BabyURLRequest.builder().url(url).build();
     }
 
     private APIIntegrationTest verifyRedirection() {
@@ -107,7 +114,7 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
     private APIIntegrationTest verifyBadRequestForInvalidURL() {
         String invalidURL = "http://invalidURL^$&%$&^";
         HttpClientResponseException httpClientResponseException = assertThrows(HttpClientResponseException.class,
-                () -> urlShortenerAPIClient.shortenURL(invalidURL));
+                () -> urlShortenerAPIClient.shortenURLInvalidRequest(babyURLRequestBody(invalidURL)));
         HttpResponse<?> httpResponse = httpClientResponseException.getResponse();
         assertEquals(HttpStatus.BAD_REQUEST, httpResponse.getStatus());
         String responseBody = httpResponse.getBody().orElseThrow().toString();

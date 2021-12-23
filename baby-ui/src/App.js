@@ -5,7 +5,7 @@ function App() {
   return (
     <div>
       <header>
-        <div id="logo"><a href="#" className="logo">Baby URL</a></div>
+        <div id="logo"><a className="logo">Baby URL</a></div>
       </header>
           
       <BabyUrlContainer/>
