@@ -12,11 +12,17 @@ sonarqube {
         property "sonar.projectKey", "punitpatel214_baby-url-generator"
         property "sonar.organization", "punitpatel"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.sourceEncoding", "UTF-8"
     }
 }
 
 subprojects {
     repositories {
         mavenCentral()
+    }
+    sonarqube {
+        properties {
+            property "sonar.sources", "src"
+        }
     }
 }
