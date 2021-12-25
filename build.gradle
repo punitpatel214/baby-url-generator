@@ -25,8 +25,8 @@ subprojects {
             property 'sonar.coverage.jacoco.xmlReportPaths', "$projectDir.parentFile.path/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml"
         }
     }
-
 }
+
 
 tasks.register("codeCoverageReport", JacocoReport) {
     // If a subproject applies the 'jacoco' plugin, add the result it to the report
