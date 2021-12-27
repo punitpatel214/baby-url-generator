@@ -1,7 +1,9 @@
 package com.babyurl.urlshortener.api;
 
 import com.babyurl.urlshortener.model.ShortenURLData;
+import com.babyurl.urlshortener.request.BabyURLRequest;
 import com.babyurl.urlshortener.resolver.RedirectionUrlResolver;
+import com.babyurl.urlshortener.response.BabyURLResponse;
 import com.babyurl.urlshortener.service.UrlShortenerService;
 import io.micronaut.http.HttpRequest;
 import org.junit.jupiter.api.Test;
@@ -9,8 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,15 +30,16 @@ class UrlShortenerAPITest {
 
     @Test
     void shouldGenerateBabyURLWithRequestBasePath() {
-        String originalURL = "http://originalURL";
-        ShortenURLData shortenURLData = new ShortenURLData("key", originalURL, Duration.ofDays(1));
-        when(urlShortenerService.shortURL(originalURL)).thenReturn(shortenURLData);
+        String url = "http://originalURL";
+        ShortenURLData shortenURLData = new ShortenURLData("key", url, Duration.ofDays(1));
+        when(urlShortenerService.shortURL(url)).thenReturn(shortenURLData);
         when(redirectionUrlResolver.resolve(httpRequest)).thenReturn("http://domain/");
 
-        String redirectionURL = new UrlShortenerAPI(urlShortenerService, redirectionUrlResolver)
-                .shortURL(originalURL, httpRequest);
+        BabyURLRequest babyURLRequest = BabyURLRequest.builder().url(url).build();
+        BabyURLResponse babyURLResponse = new UrlShortenerAPI(urlShortenerService, redirectionUrlResolver)
+                .shortURL(babyURLRequest, httpRequest);
 
-        assertEquals("http://domain/key", redirectionURL);
+        assertEquals("http://domain/key", babyURLResponse.getBabyURL());
     }
 
 }

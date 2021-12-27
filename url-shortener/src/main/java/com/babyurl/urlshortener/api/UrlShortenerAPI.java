@@ -1,15 +1,17 @@
 package com.babyurl.urlshortener.api;
 
 import com.babyurl.urlshortener.model.ShortenURLData;
+import com.babyurl.urlshortener.request.BabyURLRequest;
 import com.babyurl.urlshortener.resolver.RedirectionUrlResolver;
+import com.babyurl.urlshortener.response.BabyURLResponse;
 import com.babyurl.urlshortener.service.UrlShortenerService;
-import com.babyurl.urlshortener.validation.ValidURL;
 import io.micronaut.http.HttpRequest;
-import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import jakarta.inject.Inject;
+
+import javax.validation.Valid;
 
 @Controller
 public class UrlShortenerAPI {
@@ -23,10 +25,14 @@ public class UrlShortenerAPI {
         this.redirectionUrlResolver = redirectionUrlResolver;
     }
 
-    @Post(value = "/shortenURL", consumes = MediaType.TEXT_PLAIN, produces = MediaType.TEXT_PLAIN)
-    public String shortURL(@Body @ValidURL String url, HttpRequest<String> httpRequest) {
-        ShortenURLData shortenURLData = urlShortenerService.shortURL(url);
-        return redirectionUrlResolver.resolve(httpRequest).concat(shortenURLData.key);
+    @Post(value = "/shortenURL")
+    public BabyURLResponse shortURL(@Body @Valid BabyURLRequest babyURLRequest, HttpRequest<String> httpRequest) {
+        ShortenURLData shortenURLData = urlShortenerService.shortURL(babyURLRequest.getUrl());
+        String babyURL = redirectionUrlResolver.resolve(httpRequest).concat(shortenURLData.key);
+        return BabyURLResponse.builder()
+                .babyURL(babyURL)
+                .url(babyURLRequest.getUrl())
+                .build();
     }
 
 }

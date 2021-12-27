@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @MicronautTest
-class KeyGeneratorApplicationTest {
+public class KeyGeneratorApplicationTest {
 
     @Inject
     EmbeddedApplication<?> application;

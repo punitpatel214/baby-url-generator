@@ -1,21 +1,28 @@
 plugins {
     id "org.sonarqube" version "3.3"
+    id "jacoco"
 }
 
 version = "0.1"
 group = "com.babyurl"
-
 
 sonarqube {
     properties {
         property "sonar.projectKey", "punitpatel214_baby-url-generator"
         property "sonar.organization", "punitpatel"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.sourceEncoding", "UTF-8"
     }
 }
 
 subprojects {
     repositories {
         mavenCentral()
+    }
+    apply plugin: 'org.sonarqube'
+    sonarqube {
+        properties {
+            property 'sonar.coverage.jacoco.xmlReportPaths', "$projectDir.parentFile.path/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml"
+        }
     }
 }
