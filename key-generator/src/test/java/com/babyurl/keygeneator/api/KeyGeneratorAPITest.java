@@ -1,6 +1,6 @@
 package com.babyurl.keygeneator.api;
 
-import com.babyurl.keygeneator.Application;
+import com.babyurl.keygeneator.KeyGeneratorApplication;
 import com.babyurl.keygeneator.repository.casandra.BaseCassandraContainerTest;
 import com.datastax.oss.driver.api.core.CqlSession;
 import io.micronaut.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,7 +21,7 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@MicronautTest(application = Application.class)
+@MicronautTest(application = KeyGeneratorApplication.class)
 @TestMethodOrder(OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KeyGeneratorAPITest extends BaseCassandraContainerTest implements TestPropertyProvider {
