@@ -3,7 +3,6 @@ package com.babyurl.keygeneator.repository.casandra;
 import com.babyurl.keygeneator.exception.KeyNotFoundException;
 import com.babyurl.keygeneator.repository.KeyGeneratorRepository;
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import com.datastax.oss.driver.api.querybuilder.delete.Delete;

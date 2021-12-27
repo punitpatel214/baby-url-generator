@@ -4,9 +4,7 @@ import com.babyurl.urlshortener.client.KeyGeneratorClient;
 import com.babyurl.urlshortener.exception.ShortenURLFailException;
 import com.babyurl.urlshortener.model.ShortenURLData;
 import com.babyurl.urlshortener.repositiry.ShortenURLRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.context.annotation.Value;
-import io.micronaut.jackson.ObjectMapperFactory;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

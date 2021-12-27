@@ -12,7 +12,6 @@ import org.testcontainers.utility.DockerImageName;
 import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Collections;
 import java.util.Map;
 
 import static com.babyurl.urlshortener.repositiry.cassandra.ShortenURLTableMetaData.*;
@@ -55,7 +54,7 @@ public abstract class BaseCassandraContainerTest implements TestPropertyProvider
     }
 
     private SimpleStatement createTableStatement() {
-        return createTable(tableName)
+        return createTable(TABLE_NAME)
                 .ifNotExists()
                 .withPartitionKey(KEY.columnName, KEY.dataType)
                 .withColumn(URL.columnName, URL.dataType)
@@ -65,7 +64,7 @@ public abstract class BaseCassandraContainerTest implements TestPropertyProvider
     }
 
     protected void expireUrl(String value) {
-        getCqlSession().execute(update(tableName)
+        getCqlSession().execute(update(TABLE_NAME)
                 .setColumn(EXPIRY_TIME.columnName, literal(Instant.now().minusSeconds(1)))
                 .whereColumn(KEY.columnName)
                 .isEqualTo(literal(value))
@@ -73,7 +72,7 @@ public abstract class BaseCassandraContainerTest implements TestPropertyProvider
     }
 
     protected void deleteAllURLS() {
-        getCqlSession().execute(QueryBuilder.truncate(tableName).build());
+        getCqlSession().execute(QueryBuilder.truncate(TABLE_NAME).build());
     }
 
     @Override

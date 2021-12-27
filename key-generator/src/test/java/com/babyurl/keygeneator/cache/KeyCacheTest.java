@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,9 +36,8 @@ class KeyCacheTest {
     }
 
     @Test
-    void shouldGetKeyFromReloadCache() throws InterruptedException {
+    void shouldGetKeyFromReloadCache() {
         IntStream.range(0, 4).forEach(index -> keyCache.getKey());
-        Thread.sleep(100);
         verify(keyGeneratorRepository, atLeast(2)).getKeys(4);
     }
 }

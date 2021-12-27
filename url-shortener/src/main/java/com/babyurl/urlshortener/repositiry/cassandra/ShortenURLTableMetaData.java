@@ -9,7 +9,7 @@ public enum ShortenURLTableMetaData {
     CREATE_TIME("create_time", DataTypes.TIMESTAMP),
     EXPIRY_TIME("expiry_time", DataTypes.TIMESTAMP);
 
-    public static final String tableName = "ShortenURL";
+    public static final String TABLE_NAME = "ShortenURL";
     public final String columnName;
     public final DataType dataType;
 
