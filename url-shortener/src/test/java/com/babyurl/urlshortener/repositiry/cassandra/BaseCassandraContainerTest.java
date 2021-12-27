@@ -83,4 +83,5 @@ public abstract class BaseCassandraContainerTest implements TestPropertyProvider
         return Map.of("cassandra.default.basic.contact-points", singletonList(contactPoints));
     }
 
+
 }
