@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 *
 */
 @MicronautTest
+@Disabled("POC for generate random keys")
 class IdGeneratorTest {
 
     @Inject
@@ -22,7 +23,6 @@ class IdGeneratorTest {
 
 
     @Test
-    @Disabled("POC for generate random keys")
     void generateKeys() {
         int failureAttempt = 0;
         while (failureAttempt < 100) {
