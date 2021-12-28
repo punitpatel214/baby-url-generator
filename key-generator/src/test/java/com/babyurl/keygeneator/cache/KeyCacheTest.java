@@ -8,11 +8,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 @ExtendWith(MockitoExtension.class)
 class KeyCacheTest {
@@ -39,6 +41,6 @@ class KeyCacheTest {
     void shouldGetKeyFromReloadCache() throws InterruptedException {
         IntStream.range(0, 4).forEach(index -> keyCache.getKey());
         Thread.sleep(100);
-        verify(keyGeneratorRepository, atLeast(2)).getKeys(4);
+        await().atMost(2, TimeUnit.SECONDS).untilAsserted(() -> verify(keyGeneratorRepository, atLeast(2)).getKeys(4));
     }
 }

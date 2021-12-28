@@ -2,7 +2,7 @@ package com.babyurl.keygeneator.idgenerator;
 
 import jakarta.inject.Singleton;
 
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.stream.IntStream;
 
 @Singleton
@@ -15,11 +15,11 @@ public class RandomIdGenerator {
     }
 
     public String generateId() {
+        SecureRandom random = new SecureRandom();
         StringBuilder builder = new StringBuilder(idLength);
         IntStream.range(0, idLength)
-                .mapToObj(index -> ALPHA_NUMERIC[new Random().nextInt(ALPHA_NUMERIC.length)])
+                .mapToObj(index -> ALPHA_NUMERIC[random.nextInt(ALPHA_NUMERIC.length)])
                 .forEach(builder::append);
-
         return builder.toString();
     }
 

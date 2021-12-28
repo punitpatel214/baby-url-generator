@@ -13,7 +13,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.time.Duration;
 import java.util.Optional;
 
-import static com.babyurl.urlshortener.repositiry.cassandra.ShortenURLTableMetaData.tableName;
+import static com.babyurl.urlshortener.repositiry.cassandra.ShortenURLTableMetaData.TABLE_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest(startApplication = false)
@@ -25,7 +25,7 @@ class CassandraShortenURLRepositoryTest extends BaseCassandraContainerTest {
 
     @BeforeEach
     void setUp() {
-        cqlSession.execute(QueryBuilder.truncate(tableName).build());
+        cqlSession.execute(QueryBuilder.truncate(TABLE_NAME).build());
     }
 
     @Test

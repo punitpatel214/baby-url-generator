@@ -35,7 +35,7 @@ public class CassandraShortenURLRepository implements ShortenURLRepository {
     }
 
     private SimpleStatement insertStatement(ShortenURLData urlData) {
-        return insertInto(tableName)
+        return insertInto(TABLE_NAME)
                 .value(KEY.columnName, literal(urlData.key))
                 .value(URL.columnName, literal(urlData.originalURL))
                 .value(EXPIRY_TIME.columnName, literal(toInstant(urlData.expiryTime)))
@@ -53,7 +53,7 @@ public class CassandraShortenURLRepository implements ShortenURLRepository {
     }
 
     public  SimpleStatement selectStatement(String key) {
-        return selectFrom(tableName)
+        return selectFrom(TABLE_NAME)
                 .column(KEY.columnName).column(URL.columnName).column(EXPIRY_TIME.columnName)
                 .whereColumn(KEY.columnName).isEqualTo(literal(key))
                 .build();

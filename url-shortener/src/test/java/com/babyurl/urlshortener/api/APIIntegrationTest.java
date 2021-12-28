@@ -14,7 +14,6 @@ import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -114,8 +113,9 @@ class APIIntegrationTest extends BaseCassandraContainerTest {
 
     private APIIntegrationTest verifyBadRequestForInvalidURL() {
         String invalidURL = "http://invalidURL^$&%$&^";
+        BabyURLRequest babyURLRequest = babyURLRequestBody(invalidURL);
         HttpClientResponseException httpClientResponseException = assertThrows(HttpClientResponseException.class,
-                () -> urlShortenerAPIClient.shortenURLInvalidRequest(babyURLRequestBody(invalidURL)));
+                () -> urlShortenerAPIClient.shortenURLInvalidRequest(babyURLRequest));
         HttpResponse<?> httpResponse = httpClientResponseException.getResponse();
         assertEquals(HttpStatus.BAD_REQUEST, httpResponse.getStatus());
         String responseBody = httpResponse.getBody().orElseThrow().toString();

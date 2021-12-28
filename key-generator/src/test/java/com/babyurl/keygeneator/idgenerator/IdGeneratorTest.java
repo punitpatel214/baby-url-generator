@@ -6,11 +6,14 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /*
 * Sample Test class to generate keys offline
 *
 */
 @MicronautTest
+@Disabled("POC for generate random keys")
 class IdGeneratorTest {
 
     @Inject
@@ -20,7 +23,6 @@ class IdGeneratorTest {
 
 
     @Test
-    @Disabled
     void generateKeys() {
         int failureAttempt = 0;
         while (failureAttempt < 100) {
@@ -30,8 +32,8 @@ class IdGeneratorTest {
                 continue;
             }
             failureAttempt = 0;
-
         }
+        assertNotNull(cassandraKeyGeneratorRepository.getKey());
     }
 
 }
