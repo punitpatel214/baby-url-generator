@@ -1,33 +1,21 @@
-import React, { useState } from "react";
-import LongUrlBox from "./LongUrlBox";
-import BabyUrlBox from "./BabyUrlBox";
-import generateBabyURL from "./GenerateBabyURLHandler";
+import React, { useState } from "react"
+import LongUrlBox from "./LongUrlBox"
+import BabyUrlBox from "./BabyUrlBox"
+import generateBabyURL from "./GenerateBabyURLHandler"
+import PropTypes from "prop-types"
 
+export default function BabyUrlContainer({ babyUrlData = {} }) {
+  const [babyUrlDetail, setBabyUrlData] = useState(babyUrlData)
 
-export default function BabyUrlContainer() {
-    const [babyUrlDetail, setBabyUrlData] = useState(createBabyUrlData)
+  const resetBabyUrl = () => setBabyUrlData({})
 
-    const generateBabyUrlHandler = (longUrl) => generateBabyURL(longUrl, setBabyUrlData);
+  if (babyUrlDetail.babyUrl) {
+    return <BabyUrlBox longUrl={babyUrlDetail.longUrl} babyUrl={babyUrlDetail.babyUrl} resetBabyUrl={resetBabyUrl} />
+  }
 
-    const resetBabyUrl = () => setBabyUrlData(createBabyUrlData);
-
-    if (babyUrlDetail.isBabyUrlExists) {
-        return (
-            <BabyUrlBox longUrl={babyUrlDetail.longUrl} babyUrl={babyUrlDetail.babyUrl} resetBabyUrl={resetBabyUrl} />
-        );
-    }
-
-    return (
-        <LongUrlBox generateBabyURL={generateBabyUrlHandler} />
-    );
-
+  return <LongUrlBox generateBabyURL={(longUrl) => generateBabyURL(longUrl, setBabyUrlData)} />
 }
 
-const createBabyUrlData = (longUrl = "", babyUrl = "") => {
-    return {
-        longUrl: longUrl,
-        babyUrl: babyUrl,
-        isBabyUrlExists: babyUrl.length > 0
-    }
+BabyUrlContainer.propTypes = {
+  babyUrlData: PropTypes.object,
 }
-

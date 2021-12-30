@@ -1,0 +1,13 @@
+.gitignore
+.prettierignore
+yarn.lock
+yarn-error.log
+package-lock.json
+dist
+coverage
+public
+pnpm-lock.yaml
+pact
+logs
+reports
+src/__mocks__/transformed.html

@@ -1,17 +1,19 @@
-import './App.css';
-import BabyUrlContainer from './components/BabyUrlContainer';
+import React from "react"
+import "./App.css"
+import BabyUrlContainer from "./components/BabyUrlContainer"
 
 function App() {
   return (
     <div>
       <header>
-        <div id="logo"><a className="logo">Baby URL</a></div>
+        <div id="logo">
+          <a className="logo">Baby URL</a>
+        </div>
       </header>
-          
-      <BabyUrlContainer/>
-      
+
+      <BabyUrlContainer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
