@@ -12,16 +12,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: baby-ui
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
     - uses: actions/checkout@v2
+    - name: Open Web Client Directory
+      run: |
+        ls -la
+        cd ./baby-ui
+        ls -la
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
