@@ -1,4 +1,4 @@
-import { API } from "../../settings/constants"
+import { API } from "../settings/constants"
 
 export default function generateBabyURL(longUrl, setBabyUrlData) {
   const requestOptions = {
