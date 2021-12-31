@@ -6,7 +6,7 @@ export default function generateBabyURL(longUrl, setBabyUrlData) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ url: longUrl }),
   }
-  fetch(API.shortenURL, requestOptions)
+  fetch(API.SHORTEN_URL, requestOptions)
     .then((res) => res.json())
     .then((res) => setBabyUrlData({ longUrl: longUrl, babyUrl: res.babyURL }))
 }
