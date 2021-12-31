@@ -37,7 +37,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("com.babyurl.keygeneator.Application")
+    mainClass.set("com.babyurl.keygeneator.KeyGeneratorApplication")
 }
 
 java {

@@ -7,7 +7,7 @@ micronaut:
       configurations:
         web:
           allowedOrigins:
-            - http://localhost:3000
+            - ${ALLOWED_ORIGINS:`http://localhost:3300`}
 cassandra:
   default:
     maxSchemaAgreementWaitSeconds: 100
@@ -15,14 +15,14 @@ cassandra:
     basic:
       session-keyspace: "url_shortener"
       contact-points:
-        - "127.0.0.1:9042"
+        - ${CASSANDRA_CONTACT_POINTS:`127.0.0.1:9042`}
       load-balancing-policy:
         local-datacenter: "datacenter1"
 #redirect:
 #  domain: "http://baby.ul/"
 
 redis:
-  uri: redis://localhost
+  uri: redis://${REDIS_URI:`localhost`}
   ssl: true
   timeout: 30s
   caches:
@@ -32,4 +32,4 @@ redis:
 
 keygenerator:
   api:
-    url: "http://localhost:8082"
+    url: ${KEYGENERATOR_API:`http://localhost:8082`}

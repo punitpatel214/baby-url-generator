@@ -18,5 +18,8 @@ Baby URL Generator creates shorter url for long URLs. We call these shortened ur
   - Read Heavy Application
   - Data is relatively small 
   - in future billions of Records
+
+docker run --rm -p 8080:8080 -e CASSANDRA_CONTACT_POINTS=docker.for.mac.host.internal:9042 -e REDIS_URI=docker.for.mac.host.internal -e KEYGENERATOR_API=http://docker.for.mac.host.internal:8082 -e ALLOWED_ORIGINS=http://docker.for.mac.host.internal:3300 url-shortener:dev
+
   
 ---

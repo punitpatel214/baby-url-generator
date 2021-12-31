@@ -2,7 +2,7 @@ package com.babyurl.urlshortener.api;
 
 import com.babyurl.urlshortener.model.ShortenURLData;
 import com.babyurl.urlshortener.request.BabyURLRequest;
-import com.babyurl.urlshortener.resolver.RedirectionUrlResolver;
+import com.babyurl.urlshortener.resolver.RedirectionBaseUrlResolver;
 import com.babyurl.urlshortener.response.BabyURLResponse;
 import com.babyurl.urlshortener.service.UrlShortenerService;
 import io.micronaut.http.HttpRequest;
@@ -23,7 +23,7 @@ class UrlShortenerAPITest {
     private UrlShortenerService urlShortenerService;
 
     @Mock
-    private RedirectionUrlResolver redirectionUrlResolver;
+    private RedirectionBaseUrlResolver redirectionBaseUrlResolver;
 
     @Mock
     private HttpRequest<String> httpRequest;
@@ -33,10 +33,10 @@ class UrlShortenerAPITest {
         String url = "http://originalURL";
         ShortenURLData shortenURLData = new ShortenURLData("key", url, Duration.ofDays(1));
         when(urlShortenerService.shortURL(url)).thenReturn(shortenURLData);
-        when(redirectionUrlResolver.resolve(httpRequest)).thenReturn("http://domain/");
+        when(redirectionBaseUrlResolver.resolve(httpRequest)).thenReturn("http://domain/");
 
         BabyURLRequest babyURLRequest = BabyURLRequest.builder().url(url).build();
-        BabyURLResponse babyURLResponse = new UrlShortenerAPI(urlShortenerService, redirectionUrlResolver)
+        BabyURLResponse babyURLResponse = new UrlShortenerAPI(urlShortenerService, redirectionBaseUrlResolver)
                 .shortURL(babyURLRequest, httpRequest);
 
         assertEquals("http://domain/key", babyURLResponse.getBabyURL());

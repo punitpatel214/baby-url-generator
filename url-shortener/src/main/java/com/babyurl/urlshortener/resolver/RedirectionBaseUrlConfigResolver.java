@@ -8,11 +8,11 @@ import jakarta.inject.Singleton;
 
 @Singleton
 @Requires(property="redirect.domain")
-public class RedirectionUrlConfigResolver implements RedirectionUrlResolver  {
+public class RedirectionBaseUrlConfigResolver implements RedirectionBaseUrlResolver {
     private final String redirectUrl;
 
     @Inject
-    public RedirectionUrlConfigResolver(@Value("${redirect.domain}") String redirectUrl) {
+    public RedirectionBaseUrlConfigResolver(@Value("${redirect.domain}") String redirectUrl) {
         this.redirectUrl = redirectUrl;
     }
 

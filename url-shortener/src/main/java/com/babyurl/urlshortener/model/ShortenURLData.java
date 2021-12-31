@@ -15,4 +15,8 @@ public class ShortenURLData {
         createTime = LocalDateTime.now();
         expiryTime = createTime.plusSeconds(expiryDuration.getSeconds());
     }
+
+    public String babyURL(String baseURL) {
+        return baseURL.concat(key);
+    }
 }
