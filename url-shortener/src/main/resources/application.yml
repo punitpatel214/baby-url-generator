@@ -22,7 +22,7 @@ cassandra:
 #  domain: "http://baby.ul/"
 
 redis:
-  uri: redis://${REDIS_URI:`localhost`}
+  uri: ${REDIS_URI:`redis://localhost`}
   ssl: true
   timeout: 30s
   caches:
