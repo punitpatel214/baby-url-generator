@@ -57,11 +57,12 @@ services:
       - cassandra
       - key-generator
       - redis_container
+      - baby-ui
     environment:
       - CASSANDRA_CONTACT_POINTS=cassandra:9042
       - REDIS_URI=redis://redis_container
       - KEYGENERATOR_API=http://key-generator:8082
-      - ALLOWED_ORIGINS=https://baby-ui-punitpatel214.cloud.okteto.net/
+      - ALLOWED_ORIGINS=http://localhost:3000
     depends_on:
       - cassandra
 
@@ -70,9 +71,7 @@ services:
     build:
       context: ../baby-ui
       dockerfile: ../baby-ui/Dockerfile
+      args:
+        REACT_APP_BABY_API: http://localhost:8080
     ports:
       - '3000:80'
-    links:
-      - url-shortener
-    environment:
-      - BABY_API=http://url-shortener:8080

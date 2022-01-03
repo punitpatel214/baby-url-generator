@@ -7,6 +7,9 @@ COPY package-lock.json ./
 RUN npm ci --silent
 RUN npm install react-scripts@4.0.3 -g --silent
 COPY . ./
+RUN touch .env
+ARG REACT_APP_BABY_API
+RUN  echo "REACT_APP_BABY_API="${REACT_APP_BABY_API} >> .env
 RUN npm run build
 
 # production environment
