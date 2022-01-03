@@ -18,5 +18,3 @@ Baby URL Generator creates shorter url for long URLs. We call these shortened ur
   - Read Heavy Application
   - Data is relatively small 
   - in future billions of Records
-  
----

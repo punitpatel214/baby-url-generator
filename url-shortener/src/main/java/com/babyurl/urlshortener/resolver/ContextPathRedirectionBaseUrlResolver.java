@@ -8,12 +8,12 @@ import jakarta.inject.Singleton;
 
 @Singleton
 @Requires(missingProperty = "redirect.domain")
-public class BaseURLRedirectionUrlResolver implements RedirectionUrlResolver {
-    private HttpHostResolver httpHostResolver;
-    private String contextPath;
+public class ContextPathRedirectionBaseUrlResolver implements RedirectionBaseUrlResolver {
+    private final HttpHostResolver httpHostResolver;
+    private final String contextPath;
 
-    public BaseURLRedirectionUrlResolver(HttpHostResolver httpHostResolver,
-                                         @Value("${micronaut.server.context-path:}") String contextPath) {
+    public ContextPathRedirectionBaseUrlResolver(HttpHostResolver httpHostResolver,
+                                                 @Value("${micronaut.server.context-path:}") String contextPath) {
         this.httpHostResolver = httpHostResolver;
         this.contextPath = contextPath;
     }
