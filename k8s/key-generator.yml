@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: key-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: key-generator
+  template:
+    metadata:
+      labels:
+        app: key-generator
+    spec:
+      containers:
+        - name: key-generator
+          image: punitpatel/key-generator:dev
+          ports:
+            - containerPort: 8082
+          env:
+            - name: CASSANDRA_CONTACT_POINTS
+              value: cassandra:9042
+          imagePullPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: key-generator
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: LoadBalancer
+  selector:
+    app: key-generator
+  ports:
+    - port: 8082
+      targetPort: 8082
