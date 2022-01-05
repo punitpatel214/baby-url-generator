@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: baby-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: baby-ui
+  template:
+    metadata:
+      labels:
+        app: baby-ui
+    spec:
+      containers:
+        - name: baby-ui
+          image: punitpatel/baby-ui:okteto
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: baby-ui
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: LoadBalancer
+  selector:
+    app: baby-ui
+  ports:
+    - port: 443
+      targetPort: 80

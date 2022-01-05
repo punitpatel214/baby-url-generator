@@ -33,7 +33,7 @@ insert into keys(key) VALUES('abcd14');
 insert into keys(key) VALUES('abcd15');
 insert into keys(key) VALUES('abcd16');
 insert into keys(key) VALUES('abcd18');
-insert into keys(key) VALUES('abcd18');
+insert into keys(key) VALUES('abcd19');
 
 USE url_shortener;
 
