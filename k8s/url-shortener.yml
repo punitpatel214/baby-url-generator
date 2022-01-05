@@ -23,9 +23,9 @@ spec:
             - name: REDIS_URI
               value: redis://redis-container
             - name: KEYGENERATOR_API
-              value: http://key-generator:8082
+              value: http://key-generator
             - name: ALLOWED_ORIGINS
-              value: http://127.0.0.1:61392/
+              value: https://baby-ui-punitpatel214.cloud.okteto.net
           imagePullPolicy: Always
 ---
 apiVersion: v1
@@ -39,5 +39,5 @@ spec:
   selector:
     app: url-shortener
   ports:
-    - port: 8080
+    - port: 80
       targetPort: 8080

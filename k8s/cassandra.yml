@@ -28,16 +28,17 @@ spec:
     spec:
       containers:
         - name: cassandra
-          image: cassandra:latest
+          image: cassandra:4
           ports:
             - containerPort: 9042
           volumeMounts:
             - name: storage
               mountPath: /data/db
-#          lifecycle:
-#            postStart:
-#              exec:
-#                command: [ "/bin/sh", "cqlsh", "-f",  ../service-integration-test/cassandra.cql  ]
+          env:
+            - name: MAX_HEAP_SIZE
+              value: 256M
+            - name: HEAP_NEWSIZE
+              value: 128M
       volumes:
         - name: storage
           persistentVolumeClaim:

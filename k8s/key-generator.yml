@@ -34,5 +34,6 @@ spec:
   selector:
     app: key-generator
   ports:
-    - port: 8082
+    - port: 80
       targetPort: 8082
+#      nodePort: 30010

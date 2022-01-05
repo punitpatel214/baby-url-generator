@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: baby-ui
-          image: punitpatel/baby-ui:dev
+          image: punitpatel/baby-ui:okteto
           ports:
-            - containerPort: 3000
+            - containerPort: 80
           imagePullPolicy: Always
 ---
 apiVersion: v1
@@ -30,6 +30,5 @@ spec:
   selector:
     app: baby-ui
   ports:
-    - port: 3000
-      nodePort: 30002
+    - port: 80
       targetPort: 80

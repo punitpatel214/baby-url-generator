@@ -43,13 +43,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis
+  name: redis-container
   labels:
-    app: redis
+    app: redis-container
 spec:
   type: ClusterIP
   ports:
-    - port: 9042
+    - port: 6379
       protocol: TCP
   selector:
-    app: redis
+    app: redis-container
