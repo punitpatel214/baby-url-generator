@@ -30,5 +30,5 @@ spec:
   selector:
     app: baby-ui
   ports:
-    - port: 80
+    - port: 443
       targetPort: 80
