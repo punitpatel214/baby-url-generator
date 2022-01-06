@@ -9,18 +9,19 @@ on:
     - cron: '30 5,17 * * *'
 jobs:
   cypress-run:
-    runs-on: ubuntu-latest
+    name: Cypress run
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - name: Cypress Directory
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Open Web Client Directory
         run: |
           ls -la
           cd ./service-integration-test
-          ls -la
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests with `quiet` parameter
+          ls -la  
       - name: Cypress run
-        uses: ./
+        uses: cypress-io/github-action@v2
         with:
+          spec: cypress/integration/baby-ui.spec.js
           working-directory: service-integration-test
           
