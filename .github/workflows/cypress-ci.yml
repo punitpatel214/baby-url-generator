@@ -20,7 +20,6 @@ jobs:
          cd ./service-integration-test
          ls -la  
       - name: Cypress run
-        working-directory: service-integration-test
         uses: cypress-io/github-action@v2
         with:
-          spec: cypress/integration/baby-ui.spec.js
+          spec: ./service-integration-test/cypress/integration/baby-ui.spec.js
