@@ -1,0 +1,18 @@
+{
+  "name": "end-to-end-test",
+  "version": "1.0.0",
+  "description": "end to end test execution for baby url application",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "baby-url",
+    "short-url"
+  ],
+  "author": "punit.patel",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "cypress": "^9.2.0"
+  }
+}
