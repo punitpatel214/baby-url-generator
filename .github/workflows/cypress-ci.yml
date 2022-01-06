@@ -14,12 +14,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Open Web Client Directory
+      - name: change directory
         run: |
          ls -la
          cd ./service-integration-test
          ls -la  
       - name: Cypress run
+        working-directory: service-integration-test
         uses: cypress-io/github-action@v2
         with:
-          spec: service-integration-test/cypress/integration/baby-ui.spec.js
+          spec: cypress/integration/baby-ui.spec.js
