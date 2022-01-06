@@ -14,12 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: change directory
-        run: |
-         ls -la
-         cd ./service-integration-test
-         ls -la  
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          spec: ./service-integration-test/cypress/integration/baby-ui.spec.js
+          project: ./service-integration-test  
+    
