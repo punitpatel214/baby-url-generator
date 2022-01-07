@@ -9,16 +9,14 @@ on:
     - cron: '30 5,17 * * *'
 jobs:
   cypress-run:
-    name: Cypress run
+    name: end-to-end-test
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Open Web Client Directory
+      - name: Change directory
         run: |
-          ls -la
           cd ./service-integration-test
-          ls -la  
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
