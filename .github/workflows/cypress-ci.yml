@@ -1,0 +1,25 @@
+name: Cypress tests
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  schedule:
+    - cron: '30 5,17 * * *'
+jobs:
+  cypress-run:
+    name: end-to-end-test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Change directory
+        run: |
+          cd ./service-integration-test
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          spec: cypress/integration/baby-ui.spec.js
+          working-directory: service-integration-test
+          
