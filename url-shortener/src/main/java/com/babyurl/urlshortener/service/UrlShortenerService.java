@@ -8,27 +8,27 @@ import io.micronaut.context.annotation.Value;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import static java.time.Duration.ofMinutes;
+import java.time.Duration;
 
 @Singleton
 public class UrlShortenerService {
 
     private final KeyGeneratorClient keyGeneratorClient;
     private final ShortenURLRepository urlRepository;
-    private final long expiryDurationInMinutes;
+    private final Duration expiryDuration;
 
     @Inject
     // TODO check how can we implement build in time suffix s for seconds
     public UrlShortenerService(KeyGeneratorClient keyGeneratorClient, ShortenURLRepository urlRepository,
-                               @Value("${expiry.duration.inSeconds:1440}") long expiryDurationInMinutes) {
+                               @Value("${baby-url.expiry.duration}") Duration expiryDuration) {
         this.keyGeneratorClient = keyGeneratorClient;
         this.urlRepository = urlRepository;
-        this.expiryDurationInMinutes = expiryDurationInMinutes;
+        this.expiryDuration = expiryDuration;
     }
 
     public ShortenURLData shortURL(String originalURL) {
         String key = keyGeneratorClient.generateKey();
-        ShortenURLData urlData = new ShortenURLData(key, originalURL, ofMinutes(expiryDurationInMinutes));
+        ShortenURLData urlData = new ShortenURLData(key, originalURL, expiryDuration);
         boolean save = urlRepository.save(urlData);
         if (!save) {
             throw new ShortenURLFailException("DB insertion fail for key " + urlData.key);

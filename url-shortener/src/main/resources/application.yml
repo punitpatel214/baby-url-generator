@@ -8,6 +8,7 @@ micronaut:
         web:
           allowedOrigins:
             - ${ALLOWED_ORIGINS:`http://localhost:3300`}
+
 cassandra:
   default:
     maxSchemaAgreementWaitSeconds: 100
@@ -33,3 +34,7 @@ redis:
 keygenerator:
   api:
     url: ${KEYGENERATOR_API:`http://localhost:8082`}
+
+baby-url:
+  expiry:
+    duration: ${BABY_URL_EXPIRY:`30m`}
