@@ -7,7 +7,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 512Mi
+      storage: 1Gi
 ---
 
 apiVersion: apps/v1
@@ -33,7 +33,7 @@ spec:
             - containerPort: 9042
           volumeMounts:
             - name: storage
-              mountPath: /data/db
+              mountPath: /var/lib/cassandra
           env:
             - name: MAX_HEAP_SIZE
               value: 256M
