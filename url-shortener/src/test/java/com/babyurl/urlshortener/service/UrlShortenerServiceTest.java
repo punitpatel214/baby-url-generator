@@ -36,7 +36,7 @@ class UrlShortenerServiceTest {
         when(urlRepository.save(any(ShortenURLData.class))).thenReturn(true);
         LocalDateTime testStartTime = LocalDateTime.now();
 
-        UrlShortenerService urlShortenerService = new UrlShortenerService(keyGeneratorClient, urlRepository, 10);
+        UrlShortenerService urlShortenerService = new UrlShortenerService(keyGeneratorClient, urlRepository, Duration.ofMinutes(10));
         ShortenURLData shortURL = urlShortenerService.shortURL("originalURL");
 
         verify(urlRepository, times(1)).save(urlDataArgumentCaptor.capture());
@@ -44,7 +44,7 @@ class UrlShortenerServiceTest {
         assertEquals("originalURL", shortURL.originalURL);
         Duration duration = Duration.between(shortURL.createTime, testStartTime);
         assertTrue(duration.getSeconds() < 5);
-        assertEquals(shortURL.createTime.plusMinutes(10), shortURL.expiryTime);
+        assertEquals(shortURL.expiryTime, shortURL.createTime.plusMinutes(10));
     }
 
     @Test
@@ -52,7 +52,7 @@ class UrlShortenerServiceTest {
         when(keyGeneratorClient.generateKey()).thenReturn("k1");
         when(urlRepository.save(any(ShortenURLData.class))).thenReturn(false);
 
-        UrlShortenerService urlShortenerService = new UrlShortenerService(keyGeneratorClient, urlRepository, 10);
+        UrlShortenerService urlShortenerService = new UrlShortenerService(keyGeneratorClient, urlRepository, Duration.ofMinutes(10));
         assertThrows(ShortenURLFailException.class, () -> urlShortenerService.shortURL("anyURL"), "DB insertion fail for key k1");
     }
 }
